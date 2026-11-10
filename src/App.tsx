@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { useState } from 'react'
+import { Navbar } from './components/index'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
 import Register  from './pages/Register'
@@ -8,7 +8,8 @@ import PostDetail from './pages/PostDetail'
 function App() {
   return (
     <div>
-      <main>
+      <main className="app-main">
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
