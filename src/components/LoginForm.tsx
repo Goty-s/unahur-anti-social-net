@@ -1,34 +1,31 @@
 import { useState , type SyntheticEvent } from "react";
 import { Alert, Button, Card, Container, Form } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/usuarioContext";
 
-export function LoginForm() {
+interface LoginFormProps {
+  onLoginSuccess?: () => void;
+}
+
+export function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login } = useAuth();
 
   const [nickName, setNickname] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState("");
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
-    const loginOk = await login({
-      nickName,
-      password,
-    });
+    const loginOk = await login({ nickName, password });
 
     if (loginOk) {
       setError("");
+      onLoginSuccess?.();
       navigate("/profile");
     } else {
       setError("Email o contraseña incorrectos");
     }
-  }
-
-    if (isAuthenticated) {
-      return <Navigate to="/profile" replace />;
   }
 
   return (

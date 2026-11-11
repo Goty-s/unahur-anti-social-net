@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import type { UsuarioContextType, LoginData } from "../types/usuarioContext";
+import type { UsuarioContextType, LoginData } from "../types/index";
 import type { User } from "../types/Post.interface";
 import { getUsers } from "../services/api";
 

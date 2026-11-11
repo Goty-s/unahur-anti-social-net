@@ -1,8 +1,12 @@
 .card {
+  position: relative;
   display: flex;
   gap: 12px;
   min-width: 0;
-  padding: 16px;
+  padding: 12px 16px;
+  border: 1px solid #2f3336;
+  border-radius: 16px;
+  margin-bottom: 16px;
 }
 
 .footer {
@@ -37,14 +41,42 @@
   gap: 6px;
 }
 
+.avatar {
+  border: 1px solid #2f3336;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  user-select: none;
+}
+
 .images {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #5F4BB6 transparent;
+  padding-bottom: 4px;
 }
 
 .image {
-  width: 100%;
+  flex: 0 0 min(260px, 75%);
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  scroll-snap-align: start;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  animation: fadeInImg 0.4s ease both;
 }
 
 .footer {
@@ -85,4 +117,15 @@ p {
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+}
+
+.verMas{
+  text-decoration: none;
+  color: #5f4bb6;
+}
+
+.verMas:hover,
+.verMas:focus {
+  text-decoration: none;
+  color: #8f7bff;
 }
