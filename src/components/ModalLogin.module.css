@@ -1,0 +1,83 @@
+.overlay {
+  background: rgba(30, 30, 34, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+
+.content {
+  --bs-modal-bg: rgb(0, 0, 0);
+  --bs-modal-color: #fff;
+  --bs-modal-border-width: 0;
+  --bs-modal-border-radius: 16px;
+  --bs-modal-header-border-color: transparent;
+  --bs-modal-footer-border-color: rgba(255, 255, 255, 0.18);
+  --bs-modal-header-padding: 1.5rem 1.5rem 0.5rem;
+  --bs-modal-padding: 1rem 1.5rem 1.5rem;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.content :global(.modal-header) {
+  position: relative;
+}
+
+.content :global(.modal-title) {
+  width: 100%;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.content :global(.btn-close) {
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+  filter: invert(1);
+}
+
+.content :global(.form-control) {
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  color: #fff;
+}
+
+.content :global(.btn-primary) {
+  display: block;
+  margin: 0.5rem auto 0;
+  background-color: #5F4BB6;
+  border-color: #5F4BB6;
+}
+
+.content :global(.btn-primary:hover) {
+  background-color: #755CE6;
+  border-color: #755CE6;
+}
+
+.content :global(.modal-footer) {
+  justify-content: center;
+  text-align: center;
+}
+
+
+.content .link {
+  color: #5F4BB6;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.content .link:hover {
+  color: #755CE6;
+  text-decoration: underline;
+}
+
+.content :global(.form-control::placeholder) {
+  color: #8a8a8a;
+  opacity: 1;
+}
+
+.content :global(.form-control:focus) {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #777;
+  box-shadow: none;
+}

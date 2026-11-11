@@ -7,6 +7,8 @@
   border: 1px solid #2f3336;
   border-radius: 16px;
   margin-bottom: 16px;
+  background-color: #1e1e22;
+  color: #fff;
 }
 
 .footer {
@@ -66,7 +68,7 @@
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
   scrollbar-color: #5F4BB6 transparent;
-  padding-bottom: 4px;
+  padding-bottom: 10px;
 }
 
 .image {
@@ -119,13 +121,17 @@ p {
   white-space: nowrap;
 }
 
-.verMas{
+.verMas {
+  border-radius: 999px;
+  background-color: #5F4BB6;
+  border-color: #5F4BB6;
+  color: #fff;
   text-decoration: none;
-  color: #5f4bb6;
+  padding: 0.2rem 0.8rem;
 }
 
-.verMas:hover,
-.verMas:focus {
-  text-decoration: none;
-  color: #8f7bff;
+.verMas:hover {
+  background-color: #755CE6;
+  border-color: #755CE6;
+  color: #fff;
 }

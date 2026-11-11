@@ -13,17 +13,17 @@ type RegistroErrors = Partial<{
 }>;
 
 interface FormularioRegistroProps {
-  backToLogn?: () => void;  
+  backToLogn?: () => void;
 }
 
-function FormularioRegistro({backToLogn} : FormularioRegistroProps) {
+function FormularioRegistro({ backToLogn }: FormularioRegistroProps) {
   const [formData, setFormData] = useState<RegistroData>({
     nickName: "",
     mail: "",
   });
 
   const [errors, setErrors] = useState<RegistroErrors>({});
-  const [errorsServer , seterrorsServer] = useState("")
+  const [errorsServer, seterrorsServer] = useState("")
   const [registroExitoso, setRegistroExitoso] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -59,13 +59,13 @@ function FormularioRegistro({backToLogn} : FormularioRegistroProps) {
     seterrorsServer("");
 
     if (Object.keys(newErrors).length === 0) {
-      try{
-        await createUser({nickName : formData.nickName , email : formData.mail});
+      try {
+        await createUser({ nickName: formData.nickName, email: formData.mail });
         setRegistroExitoso(true);
         backToLogn?.();
-      } catch(error) {
+      } catch (error) {
         seterrorsServer(error instanceof Error ? error.message : "No se pudo crear el usuario");
-      } 
+      }
     }
   }
 
@@ -98,7 +98,7 @@ function FormularioRegistro({backToLogn} : FormularioRegistroProps) {
           {errorsServer}
         </div>
       )}
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary mt-2">
         Crear cuenta
       </button>
     </form>

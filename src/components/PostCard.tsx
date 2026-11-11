@@ -50,7 +50,7 @@ export default function PostCard({ post }: { post: PostWithDetails }) {
             </button>
           </div>
           <Link className={styles.verMas} to={`/post/${post.id}`}>
-            <i className="bi bi-eye"> Ver más</i> 
+            <i className="bi bi-eye"> Ver más</i>
           </Link>
 
         </footer>

@@ -28,14 +28,7 @@ function Navbar() {
                             </li>
                             {isProfile ? (
                                 <li>
-                                    <NavLink
-                                        to="/"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            logout();
-                                            navigate("/");
-                                        }}
-                                    >
+                                    <NavLink to="/" onClick={(e) => { e.preventDefault(); logout(); navigate("/"); }}>
                                         <i className="bi bi-box-arrow-left"></i>
                                     </NavLink>
                                 </li>
@@ -49,13 +42,8 @@ function Navbar() {
                         </>
                     ) : (
                         <li>
-                            <NavLink
-                                to="/"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setMostrarModal(true);
-                                }}
-                            >
+                            <NavLink to="/"
+                                onClick={(e) => { e.preventDefault(); setMostrarModal(true); }}>
                                 <i className="bi bi-box-arrow-in-right"></i>
                             </NavLink>
                         </li>
