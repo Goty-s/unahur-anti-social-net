@@ -5,9 +5,10 @@ import { useAuth } from "../context/usuarioContext";
 
 interface LoginFormProps {
   onLoginSuccess?: () => void;
+  onRegister?: () => void;
 }
 
-export function LoginForm({ onLoginSuccess }: LoginFormProps) {
+export function LoginForm({ onLoginSuccess , onRegister }: LoginFormProps) {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -46,8 +47,11 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
             <Button type="submit" className="w-100">
               Ingresar
             </Button>
-            <Button type="button" variant="link" className="w-100 mt-2" onClick={() => navigate("/")}>
+            <Button type="button" variant="link" className="w-100 mt-2" onClick={() => {onLoginSuccess?.();navigate("/")}}>
               Volver al inicio
+            </Button>
+            <Button type="button" variant="link" className="w-100 mt-2" onClick= {onRegister}>
+              Registrarse
             </Button>
           </Form>
         </Card.Body>

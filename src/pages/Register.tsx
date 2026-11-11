@@ -1,9 +1,9 @@
-import { LoginForm } from "../components"
+import { FormularioRegistro} from "../components"
 
 function Register() {
   return (
     <div>
-      <LoginForm/>
+      <FormularioRegistro/>
     </div>
   )
 }
