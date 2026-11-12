@@ -1,11 +1,12 @@
 import styles from "./Navbar.module.css";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ModalLogin } from "./index";
+import { ModalLogin, ModalNuevaPublicacion } from "./index";
 import { useAuth } from "../context/usuarioContext";
 
 function Navbar() {
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [mostrarModalNuevaPublicacion, setMostrarModalNuevaPublicacion] = useState(false);
     const { isAuthenticated, logout } = useAuth();
     const { pathname } = useLocation();
     const isProfile = pathname === "/profile";
@@ -22,7 +23,7 @@ function Navbar() {
                     {isAuthenticated ? (
                         <>
                             <li>
-                                <NavLink to="/crear-post" >
+                                <NavLink to="/" onClick={(e) => { e.preventDefault(); setMostrarModalNuevaPublicacion(true); }}>
                                     <i className="bi bi-pencil-square"></i>
                                 </NavLink>
                             </li>
@@ -52,6 +53,7 @@ function Navbar() {
             </nav>
 
             <ModalLogin mostrar={mostrarModal} cerrarModal={() => setMostrarModal(false)} />
+            <ModalNuevaPublicacion mostrar={mostrarModalNuevaPublicacion} cerrarModal={() => setMostrarModalNuevaPublicacion(false)} />
         </>
     );
 }

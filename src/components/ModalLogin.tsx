@@ -1,50 +1,42 @@
-import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
-import { FormularioRegistro, LoginForm } from "./index";
-import styles from "./ModalLogin.module.css";
 import { Button } from "react-bootstrap";
+import { FormularioRegistro, LoginForm } from "./index";
+import ModalBase from "./ModalBase";
+import styles from "./ModalBase.module.css";
 
 interface ModalLoginProps {
-    mostrar: boolean;
-    cerrarModal: () => void;
+  mostrar: boolean;
+  cerrarModal: () => void;
 }
 
 function ModalLogin({ mostrar, cerrarModal }: ModalLoginProps) {
-    const [mostrarRegistro, setMostrarRegistro] = useState(false);
+  const [mostrarRegistro, setMostrarRegistro] = useState(false);
 
-    return (
-        <Modal show={mostrar} onHide={cerrarModal} centered className={styles.overlay} contentClassName={styles.content}>
-            <Modal.Header closeButton >
-                <Modal.Title>
-                    {mostrarRegistro ? "Crear Cuenta" : "Iniciar sesión"}
-                </Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-                {mostrarRegistro ? (
-                    <FormularioRegistro backToLogn={() => setMostrarRegistro(false)} />
-                ) : (
-                    <LoginForm onLoginSuccess={cerrarModal} />
-                )}
-            </Modal.Body>
-
-            <Modal.Footer>
-                {mostrarRegistro ? (
-                    <>
-                        <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(false)}>
-                            ¿Ya tenés cuenta? Iniciá sesión
-                        </Button>
-                    </>
-                ) : (
-                    <>
-                        <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(true)}>
-                            ¿No tenés cuenta? Registrate acá
-                        </Button>
-                    </>
-                )}
-            </Modal.Footer>
-        </Modal>
-    );
+  return (
+    <ModalBase
+      mostrar={mostrar}
+      cerrarModal={cerrarModal}
+      titulo={mostrarRegistro ? "Crear Cuenta" : "Iniciar sesión"}
+      onExited={() => setMostrarRegistro(false)}
+      footer={
+        mostrarRegistro ? (
+          <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(false)}>
+            ¿Ya tenés cuenta? Iniciá sesión
+          </Button>
+        ) : (
+          <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(true)}>
+            ¿No tenés cuenta? Registrate acá
+          </Button>
+        )
+      }
+    >
+      {mostrarRegistro ? (
+        <FormularioRegistro backToLogn={() => setMostrarRegistro(false)} />
+      ) : (
+        <LoginForm onLoginSuccess={cerrarModal} />
+      )}
+    </ModalBase>
+  );
 }
 
 export default ModalLogin;
