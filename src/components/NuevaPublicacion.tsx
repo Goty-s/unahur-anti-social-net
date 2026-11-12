@@ -1,10 +1,13 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "react";
 import styles from "./NuevaPublicacion.module.css";
+import type { Tag } from "../types";
+import { createPost, createPostImage, getTags } from "../services/api";
+import { useAuth } from "../context/usuarioContext";
 
 interface PublicacionData {
   descripcion: string;
   imagenes: string[];
-  tags: string[];
+  tags: number[];
 };
 
 type PublicacionErrors = Partial<{
@@ -12,7 +15,20 @@ type PublicacionErrors = Partial<{
   imagenes: string;
 }>;
 
+async function validarImagen(url : string) : Promise<boolean> {
+  try {
+    const response = await fetch(url , {
+      method : `HEAD`
+    });
+    const contentType = response.headers.get("Content-Type");
+    return response.ok && contentType?.startsWith("image/") == true;
+  } catch {
+    return false
+  }
+}
+
 function NuevaPublicacion() {
+  const {user} = useAuth();
   const [formData, setFormData] = useState<PublicacionData>({
     descripcion: "",
     imagenes: [""],
@@ -21,14 +37,15 @@ function NuevaPublicacion() {
 
   const [errors, setErrors] = useState<PublicacionErrors>({});
   const [publicacionExitosa, setPublicacionExitosa] = useState(false);
+  const [etiquetasDisponibles , setEtiquetasDisponibles] = useState<Tag[]>([]);
 
-  const etiquetasDisponibles = [
-    "juegos",
-    "musica",
-    "deportes",
-    "politica",
-    "otros"
-  ];
+  useEffect(() => {
+    async function cargarTags() {
+      const tags = await getTags();
+      setEtiquetasDisponibles(tags);
+    }
+    cargarTags();
+  } , []);
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
     const { name, value } : { name: string; value: string } = e.target;
@@ -47,6 +64,10 @@ function NuevaPublicacion() {
       ...formData,
       imagenes: nuevasImagenes,
     });
+    setErrors((erroresPrevios) => ({
+      ...erroresPrevios,
+      imagenes : undefined
+    }))
     setPublicacionExitosa(false);
   }
 
@@ -55,6 +76,10 @@ function NuevaPublicacion() {
       ...formData,
       imagenes: [...formData.imagenes, ""],
     });
+    setErrors((erroresPrevios) => ({
+      ...erroresPrevios,
+      imagenes : undefined
+    }))
     setPublicacionExitosa(false);
   }
 
@@ -65,20 +90,25 @@ function NuevaPublicacion() {
       ...formData,
       imagenes: nuevasImagenes,
     });
+    setErrors((erroresPrevios) => ({
+      ...erroresPrevios,
+      imagenes : undefined
+    }))
     setPublicacionExitosa(false);
   }
 
   function handleTagChange(e: ChangeEvent<HTMLInputElement>) {
-    const { value, checked }: { value: string; checked: boolean } = e.target;
+    const { value, checked } = e.target;
+    const tagId = Number(value);
     if (checked) {
       setFormData({
         ...formData,
-        tags: [...formData.tags, value],
+        tags: [...formData.tags, tagId],
       });
     } else {
       setFormData({
         ...formData,
-        tags: formData.tags.filter((tag) => tag !== value),
+        tags: formData.tags.filter((tag) => tag !== tagId),
       });
     }
 
@@ -95,12 +125,48 @@ function NuevaPublicacion() {
     return newErrors;
   }
 
-  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+    setPublicacionExitosa(false)
     const newErrors: PublicacionErrors = validateForm();
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      setPublicacionExitosa(true);
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+    
+    if(!user) {
+      console.error(`No hay un usuario autenticado`)
+      return;
+    }
+
+    try {
+      const imagenesValidas = formData.imagenes.filter((imagen) => imagen.trim() !== "");
+      const resultados = await Promise.all(
+        imagenesValidas.map((imagen) => validarImagen(imagen))
+      );
+
+      if(resultados.some((resultado) => !resultado)) {
+        setErrors({imagenes : "Se debe ingresar una URL valida"})
+        return;
+      }
+
+      const NuevaPublicacion = await createPost({
+        description : formData.descripcion,
+        userId : user.id,
+        tagIds: formData.tags
+      });
+
+      await Promise.all(
+        imagenesValidas.map((imagen) =>
+          createPostImage({
+            url : imagen,
+            postId : NuevaPublicacion.id
+          })
+        )
+      );
+      setPublicacionExitosa(true)
+    } catch (error) {
+      console.error(`Error al crear la publicacion`, error);
     }
   }
 
@@ -120,20 +186,20 @@ function NuevaPublicacion() {
           {formData.imagenes.map((imagen, index) => (
             <div className={styles.imagen} key={index}>
               <input type="url" name={`imagen-${index}`} className={`form-control ${errors.imagenes ? "is-invalid" : ""}`} value={imagen} onChange={(e) => handleImagenChange(e, index)} placeholder="https://..."/>
+              {errors.imagenes && (
+                <div className="invalid-feedback">{errors.imagenes}</div>
+              )}
               <button type="button" className="btn btn-secondary" onClick={() => eliminarImagen(index)}>Eliminar</button>
             </div>
           ))}
-          {errors.imagenes && (
-            <div className="invalid-feedback">{errors.imagenes}</div>
-          )}
           <button type="button" className="btn btn-secondary" onClick={agregarImagen}>Agregar imagen</button>
         </div>
         <div className={styles.etiquetas}>
           <label>Etiquetas</label>
           {etiquetasDisponibles.map((etiqueta) => (
-            <div className={styles.etiqueta} key={etiqueta}>
-              <input type="checkbox" id={etiqueta} value={etiqueta} checked={formData.tags.includes(etiqueta)} onChange={handleTagChange}/>
-              <label htmlFor={etiqueta}>{etiqueta}</label>
+            <div className={styles.etiqueta} key={etiqueta.id}>
+              <input type="checkbox" id={`tag-${etiqueta.id}`} value={etiqueta.id} checked={formData.tags.includes(etiqueta.id)} onChange={handleTagChange}/>
+              <label htmlFor={`tag-${etiqueta.id}`}>{etiqueta.name}</label>
             </div>
           ))}
         </div>

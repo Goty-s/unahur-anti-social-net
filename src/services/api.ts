@@ -24,4 +24,4 @@ export const getPostImages = (postId: number) =>request<PostImage[]>(`/postimage
 export const createUser = (user: {nickName : string , email : string}) => request<User>("/users" , {method: "POST", body:JSON.stringify(user)});
 export const createPost = (post: {description : string , userId : number , tagIds?: number[]}) => request<Post>("/posts" , {method: "POST", body:JSON.stringify(post)});
 export const createComments = (comment: {content : string , userId : number , postId : number}) => request<PostComment>("/comments" , {method: "POST", body:JSON.stringify(comment)});
-export const createPostImage = (image: {url : string , postId : number}) => request<PostImage>("/postImages" , {method: "POST", body:JSON.stringify(image)});
+export const createPostImage = (image: {url : string , postId : number}) => request<PostImage>("/postimages" , {method: "POST", body:JSON.stringify(image)});

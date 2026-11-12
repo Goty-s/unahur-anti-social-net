@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom"
 import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
 import type { PostWithDetails } from "../types"
-import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import { useEffect, useState , type SyntheticEvent} from "react";
 import { PostCard } from "../components";
 import PostCommentCard from "../components/PostCommentCard";
 import { useAuth } from "../context/usuarioContext";
@@ -54,7 +53,7 @@ function PostDetail() {
 
   const postId = post.id;
 
-  async function handleAddComment(event: FormEvent<HTMLFormElement>) {
+  async function handleAddComment(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!newCommentText.trim() || !user) return;
 
@@ -64,7 +63,7 @@ function PostDetail() {
       const createdComment = await createComments({
         content: newCommentText,
         userId: user.id,
-        postId
+        postId: postId
       });
 
       setPost((prevPost) => {
