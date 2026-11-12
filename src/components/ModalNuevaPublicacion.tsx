@@ -9,7 +9,7 @@ interface ModalNuevaPublicacionProps {
 function ModalNuevaPublicacion({ mostrar, cerrarModal }: ModalNuevaPublicacionProps) {
   return (
     <ModalBase mostrar={mostrar} cerrarModal={cerrarModal} titulo="Nueva Publicación">
-      <NuevaPublicacionForm />
+      <NuevaPublicacionForm onPublicacionSuccess={cerrarModal} />
     </ModalBase>
   );
 }

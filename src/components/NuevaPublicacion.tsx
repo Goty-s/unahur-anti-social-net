@@ -15,6 +15,10 @@ type PublicacionErrors = Partial<{
   imagenes: string;
 }>;
 
+interface NuevaPublicacionProps {
+  onPublicacionSuccess?: () => void;
+}
+
 async function validarImagen(url : string) : Promise<boolean> {
   try {
     const response = await fetch(url , {
@@ -27,7 +31,7 @@ async function validarImagen(url : string) : Promise<boolean> {
   }
 }
 
-function NuevaPublicacion() {
+function NuevaPublicacion({ onPublicacionSuccess }: NuevaPublicacionProps) {
   const {user} = useAuth();
   const [formData, setFormData] = useState<PublicacionData>({
     descripcion: "",
@@ -165,6 +169,7 @@ function NuevaPublicacion() {
         )
       );
       setPublicacionExitosa(true)
+      onPublicacionSuccess?.();
     } catch (error) {
       console.error(`Error al crear la publicacion`, error);
     }
