@@ -22,7 +22,7 @@ function Navbar() {
                     {isAuthenticated ? (
                         <>
                             <li>
-                                <NavLink to="/crear-post">
+                                <NavLink to="/crear-post" >
                                     <i className="bi bi-pencil-square"></i>
                                 </NavLink>
                             </li>

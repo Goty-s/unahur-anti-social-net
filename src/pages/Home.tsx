@@ -63,15 +63,24 @@ export default function Home() {
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col md={8} lg={6}>
-        {posts.length === 0 && (
-          <p className="text-secondary">Todavía no hay publicaciones.</p>
-        )}
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </Col>
-    </Row>
+    <>
+      <header>
+        <h2>Bienvenido a Anti-social-net</h2>
+        <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
+      </header>
+      <div>
+        <Row className="justify-content-center">
+          <Col md={8} lg={6}>
+            {posts.length === 0 && (
+              <p className="text-secondary">Todavía no hay publicaciones.</p>
+              
+            )}
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 }

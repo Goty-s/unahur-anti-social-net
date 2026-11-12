@@ -1,8 +1,110 @@
+import { useParams } from "react-router-dom"
+import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
+import type { PostWithDetails } from "../types"
+import { useEffect, useState } from "react";
+import { PostCard } from "../components";
+import PostCommentCard from "../components/PostCommentCard";
+import { useAuth } from "../context/usuarioContext";
+
+const { user } = useAuth();
+
 function PostDetail() {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<PostWithDetails | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchFullDetail = async () => {
+      if (!id) return;
+
+      try {
+        setLoading(true);
+
+        const [postData, imagesData, commentsData] = await Promise.all([
+          getPosts(),
+          getPostImages(Number(id)).catch(() => []),
+          getPostComments(Number(id)).catch(() => []),
+        ]);
+
+        const postCompleto = postData.find((post) => post.id === Number(id))
+
+        if (!postCompleto || postCompleto.id === undefined) {
+          throw new Error('Publicación no encontrada');
+        }
+
+        setPost({
+          ...postCompleto,
+          images: imagesData,
+          comments: commentsData,
+        });
+      } catch (error) {
+        console.error('Error al cargar el detalle del post:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFullDetail();
+  }, [id]);
+
+  if (loading) return <p>Cargando detalles...</p>;
+  if (!post) return <p>Publicación no encontrada.</p>;
+
+  const [newCommentText, setNewCommentText] = useState<string>('');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+
+  function handleAddComment() {
+    async () => {
+      if (!newCommentText.trim() || !post) return;
+
+      try {
+        setSubmitting(true);
+
+        const createdComment = await createComments({
+          content: newCommentText,
+          userId: user!.id,
+          postId: post.id
+        });
+
+        setPost((prevPost) => {
+          if (!prevPost) return null;
+          return {
+            ...prevPost,
+            comments: [...prevPost.comments, createdComment],
+          };
+        });
+
+        setNewCommentText('');
+      } catch (error) {
+        console.error('El comentario no puedo ser enviado debido a:', error);
+      } finally {
+        setSubmitting(false);
+      }
+    };
+  }
+
   return (
-    <div>
-      
-    </div>
+    <>
+      <PostCard post={post} />
+      <h3>Comentarios({post.comments.length})</h3>
+      <div>
+        {post.comments.map(com => <PostCommentCard post={com} />)}
+      </div>
+      <div> 
+        <form onSubmit={handleAddComment} style={{ marginTop: '20px' }} /* deberia verificar que el usuario este logueado primero */>
+          <textarea
+            value={newCommentText}
+            onChange={(e) => setNewCommentText(e.target.value)}
+            placeholder="Escribe un comentario..."
+            disabled={submitting}
+          />
+          <button type="submit" disabled={submitting || !newCommentText.trim()}>
+            {submitting ? 'Enviando...' : 'Comentar'}
+          </button>
+        </form>
+      </div>
+    </>
   )
 }
 

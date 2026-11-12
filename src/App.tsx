@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Navbar } from './components/index'
+import { Navbar, NuevaPublicacion } from './components/index'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
 import Register  from './pages/Register'
@@ -15,6 +15,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<Register />} />
           <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/crear-post" element={<NuevaPublicacion/>} />
         </Routes>
       </main>
     </div>
