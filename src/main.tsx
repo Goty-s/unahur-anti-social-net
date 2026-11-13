@@ -6,12 +6,14 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css"
 import { AuthProvider } from './context/usuarioContext.tsx'
+import ScrollToTop from './components/ScrollToTop.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
+        <ScrollToTop/>
         <App />
       </AuthProvider>
     </BrowserRouter>

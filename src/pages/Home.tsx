@@ -9,6 +9,92 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+
+  /*FUNCIONES PARA QUE HAYA SCROLL INFINITO implementar con pruebas
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [fetchingMore, setFetchingMore] = useState<boolean>(false);
+
+
+ async function load() {
+    if (fetchingMore || !hasMore) return;
+
+      try {
+        if (currentPage === 1) {
+          setLoading(true);
+        } else {
+          setFetchingMore(true);
+        }
+        const limit=4
+        
+        const basePosts: Post[] = await getPosts();
+
+        const detailed = await Promise.all(
+          basePosts.map(async (post) => {
+            const [images, comments] = await Promise.all([
+              getPostImages(post.id),
+              getPostComments(post.id),
+            ]);
+            return { ...post, images, comments };
+          })
+        );
+        if (detailed.length < limit) {
+                setHasMore(false);
+        }
+
+        setPosts((prevPosts) => {
+        const combined = [...prevPosts, ...detailed];
+        return combined.sort((a, b) => b.id - a.id);
+        });
+        setPage((prevPage) => prevPage + 1);
+
+      } catch (e) {
+          setError(
+            e instanceof TypeError
+              ? "No se pudo conectar con la API. ¿Está corriendo en el puerto 3001?"
+              : e instanceof Error
+                ? e.message
+                : "Error al cargar las publicaciones"
+          );
+      } finally {
+        setLoading(false);
+        setFetchingMore(false);
+      }
+    }
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!cancelled) {
+      loadMorePosts(1);
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const scrollHandler = (e: React.UIEvent<HTMLDivElement>) => {
+    const element = e.currentTarget;
+    const scrolledToEnd = element.scrollTop + element.clientHeight >= element.scrollHeight - 20; // Margen de 20px
+
+    if (scrolledToEnd && !fetchingMore && hasMore) {
+      load(page);
+    }
+  };
+
+  if (loading && posts.length === 0) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" role="status" />
+      </div>
+    );
+  }
+
+  if (error && posts.length === 0) {
+    return <Alert variant="danger">{error}</Alert>;
+  }
+
+  */
+ 
   useEffect(() => {
     let cancelled = false;
 
@@ -62,18 +148,20 @@ export default function Home() {
     return <Alert variant="danger">{error}</Alert>;
   }
 
+
+
   return (
     <>
       <header>
         <h2>Bienvenido a Anti-social-net</h2>
         <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
       </header>
-      <div>
+      <div /*onScroll={scrollHandler}*/>
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
             {posts.length === 0 && (
               <p className="text-secondary">Todavía no hay publicaciones.</p>
-              
+
             )}
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
