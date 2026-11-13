@@ -25,3 +25,4 @@ export const createUser = (user: {nickName : string , email : string}) => reques
 export const createPost = (post: {description : string , userId : number , tagIds?: number[]}) => request<Post>("/posts" , {method: "POST", body:JSON.stringify(post)});
 export const createComments = (comment: {content : string , userId : number , postId : number}) => request<PostComment>("/comments" , {method: "POST", body:JSON.stringify(comment)});
 export const createPostImage = (image: {url : string , postId : number}) => request<PostImage>("/postimages" , {method: "POST", body:JSON.stringify(image)});
+export const getPostsByUser = (userId: number) => request<Post[]>(`/posts?userId=${userId}`);
