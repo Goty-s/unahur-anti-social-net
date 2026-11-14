@@ -10,4 +10,6 @@ export type UsuarioContextType = {
   isAuthenticated: boolean;
   login: (data: LoginData) => Promise<boolean>;
   logout: () => void;
+  mostrarLogin : boolean;
+  setMostrarLogin: (mostrar: boolean) => void;
 };

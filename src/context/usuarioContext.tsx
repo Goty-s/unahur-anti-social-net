@@ -6,6 +6,7 @@ import { getUsers } from "../services/api";
 const usuarioContext = createContext<UsuarioContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [mostrarLogin , setMostrarLogin] = useState(false);
   const [user, setUser] = useState<User | null>(() => {
     const usuarioGuardado = localStorage.getItem("user");
     if (usuarioGuardado) {
@@ -54,6 +55,8 @@ async function login(data: LoginData): Promise<boolean> {
     isAuthenticated: user !== null,
     login,
     logout,
+    mostrarLogin,
+    setMostrarLogin
   };
 
   return (

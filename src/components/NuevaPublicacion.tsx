@@ -1,8 +1,8 @@
 import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "react";
-import styles from "./NuevaPublicacion.module.css";
 import type { Tag } from "../types";
 import { createPost, createPostImage, getTags } from "../services/api";
 import { useAuth } from "../context/usuarioContext";
+import styles from "./NuevaPublicacion.module.css";
 
 interface PublicacionData {
   descripcion: string;
@@ -187,14 +187,13 @@ function NuevaPublicacion({ onPublicacionSuccess }: NuevaPublicacionProps) {
           )}
         </div>
         <div className={styles.campo}>
-          <label>URL de imagenes (opcional)</label>
           {formData.imagenes.map((imagen, index) => (
             <div className={styles.imagen} key={index}>
-              <input type="url" name={`imagen-${index}`} className={`form-control ${errors.imagenes ? "is-invalid" : ""}`} value={imagen} onChange={(e) => handleImagenChange(e, index)} placeholder="https://..."/>
+              <input type="url" name={`imagen-${index}`} className={`form-control ${errors.imagenes ? "is-invalid" : ""}`} value={imagen} onChange={(e) => handleImagenChange(e, index)} placeholder="URL de imagenes:"/>
               {errors.imagenes && (
                 <div className="invalid-feedback">{errors.imagenes}</div>
               )}
-              <button type="button" className="btn btn-secondary" onClick={() => eliminarImagen(index)}>Eliminar</button>
+              <button type="button" className="btn btn-secondary" onClick={() => eliminarImagen(index)}>Eliminar imagen</button>
             </div>
           ))}
           <button type="button" className="btn btn-secondary" onClick={agregarImagen}>Agregar imagen</button>
