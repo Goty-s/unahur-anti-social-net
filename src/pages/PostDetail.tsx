@@ -1,10 +1,15 @@
 import { useParams } from "react-router-dom"
 import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
 import type { PostWithDetails } from "../types"
-import { useEffect, useState , type SyntheticEvent} from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import { PostCard } from "../components";
-import PostCommentCard from "../components/PostCommentCard";
+import PostCommentCard from "../components/CommentCard";
 import { useAuth } from "../context/usuarioContext";
+import styles from "./PostDetail.module.css";
+
+
+const COLORES = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
+
 
 function PostDetail() {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +18,8 @@ function PostDetail() {
   const [loading, setLoading] = useState<boolean>(true);
   const [newCommentText, setNewCommentText] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [colorAvatar] = useState(() => COLORES[Math.floor(Math.random() * COLORES.length)]);
+  const nick = user?.nickName ?? "anonimo";
 
   useEffect(() => {
     const fetchFullDetail = async () => {
@@ -89,18 +96,33 @@ function PostDetail() {
       <div>
         {post.comments.map(com => <PostCommentCard key={com.id} post={com} />)}
       </div>
-      <div> 
-        <form onSubmit={handleAddComment} style={{ marginTop: '20px' }} /* deberia verificar que el usuario este logueado primero */>
-          <textarea
-            value={newCommentText}
-            onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="Escribe un comentario..."
-            disabled={submitting}
-          />
-          <button type="submit" disabled={submitting || !newCommentText.trim()}>
-            {submitting ? 'Enviando...' : 'Comentar'}
-          </button>
-        </form>
+      <div className={styles.nuevoComentario}>
+        <div>
+          <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
+            {nick.charAt(0).toUpperCase()}
+          </span>
+        </div>
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <span className={styles.name}>{nick}</span>
+            <span className={styles.handle}>@{nick}</span>
+          </header>
+          <form onSubmit={handleAddComment} style={{ marginTop: '10px' }} /* deberia verificar que el usuario este logueado primero */>
+            <textarea
+              value={newCommentText}
+              onChange={(e) => setNewCommentText(e.target.value)}
+              placeholder="Escribe un comentario..."
+              disabled={submitting}
+              className={styles.textarea}
+            />
+            <div className={styles.submitContainer}>
+              <button type="submit" disabled={submitting || !newCommentText.trim()} className={styles.comentar}>
+                {submitting ? 'Enviando...' : 'Comentar'}
+              </button>
+            </div>
+
+          </form>
+        </div>
       </div>
     </>
   )

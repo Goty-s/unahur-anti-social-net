@@ -6,3 +6,4 @@ export { default as NuevaPublicacion } from "./NuevaPublicacion";
 export { default as FormularioRegistro } from "./formularioRegistro";
 export { default as NuevaPublicacionForm } from "./NuevaPublicacion";
 export { default as ModalNuevaPublicacion } from "./ModalNuevaPublicacion";
+export { default as CommentCard } from "./CommentCard";

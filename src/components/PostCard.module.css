@@ -56,6 +56,22 @@
   user-select: none;
 }
 
+.name {
+    font-weight: 600;
+    color: #fff;
+}
+
+.handle {
+    font-weight: 400;
+    color: #b0daf162;
+}
+
+.date {
+    font-weight: 400;
+    color: #8a8a946b;
+    font-style: italic;
+}
+
 .images {
   display: flex;
   flex-direction: row;
