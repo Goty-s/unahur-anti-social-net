@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { FormularioRegistro, LoginForm } from "./index";
+import { RegisterForm, LoginForm } from "./index";
 import ModalBase from "./ModalBase";
 import styles from "./ModalBase.module.css";
 
-interface ModalLoginProps {
+interface LoginModalProps {
   mostrar: boolean;
   cerrarModal: () => void;
 }
 
-function ModalLogin({ mostrar, cerrarModal }: ModalLoginProps) {
+function LoginModal({ mostrar, cerrarModal }: LoginModalProps) {
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
 
   return (
@@ -31,7 +31,7 @@ function ModalLogin({ mostrar, cerrarModal }: ModalLoginProps) {
       }
     >
       {mostrarRegistro ? (
-        <FormularioRegistro backToLogn={() => setMostrarRegistro(false)} />
+        <RegisterForm backToLogn={() => setMostrarRegistro(false)} />
       ) : (
         <LoginForm onLoginSuccess={cerrarModal} />
       )}
@@ -39,4 +39,4 @@ function ModalLogin({ mostrar, cerrarModal }: ModalLoginProps) {
   );
 }
 
-export default ModalLogin;
+export default LoginModal;

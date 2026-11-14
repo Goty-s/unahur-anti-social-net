@@ -1,28 +1,27 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
-import styles from "./FormularioRegistro.module.css";
 import { createUser } from "../services/api";
 
-interface RegistroData {
+interface RegisterData {
   nickName: string;
   mail: string;
 };
 
-type RegistroErrors = Partial<{
+type RegisterErrors = Partial<{
   nickName: string;
   mail: string;
 }>;
 
-interface FormularioRegistroProps {
+interface RegisterFormProps {
   backToLogn?: () => void;
 }
 
-function FormularioRegistro({ backToLogn }: FormularioRegistroProps) {
-  const [formData, setFormData] = useState<RegistroData>({
+function RegisterForm({ backToLogn }: RegisterFormProps) {
+  const [formData, setFormData] = useState<RegisterData>({
     nickName: "",
     mail: "",
   });
 
-  const [errors, setErrors] = useState<RegistroErrors>({});
+  const [errors, setErrors] = useState<RegisterErrors>({});
   const [errorsServer, seterrorsServer] = useState("")
   const [registroExitoso, setRegistroExitoso] = useState(false);
 
@@ -36,7 +35,7 @@ function FormularioRegistro({ backToLogn }: FormularioRegistroProps) {
   }
 
   function validateForm() {
-    const newErrors: RegistroErrors = {};
+    const newErrors: RegisterErrors = {};
 
     if (formData.nickName.trim() === "") {
       newErrors.nickName = "El campo nickname está vacío";
@@ -70,17 +69,17 @@ function FormularioRegistro({ backToLogn }: FormularioRegistroProps) {
   }
 
   return (
-    <form id="formulario" className={styles.formulario} onSubmit={handleSubmit} noValidate>
+    <form id="formulario" onSubmit={handleSubmit} noValidate>
       <p>Por favor ingresá tus datos para crear una cuenta</p>
-      <div className={styles.campos}>
-        <div className={styles.campo}>
+      <div>
+        <div>
           <label htmlFor="nickName">Nickname *</label>
           <input type="text" name="nickName" id="nickName" className={`form-control ${errors.nickName ? "is-invalid" : ""}`} value={formData.nickName} onChange={handleChange} />
           {errors.nickName && (
             <div className="invalid-feedback">{errors.nickName}</div>
           )}
         </div>
-        <div className={styles.campo}>
+        <div>
           <label htmlFor="mail">Mail *</label>
           <input type="email" name="mail" id="mail" className={`form-control ${errors.mail ? "is-invalid" : ""}`} value={formData.mail} onChange={handleChange} />
           {errors.mail && (
@@ -105,4 +104,4 @@ function FormularioRegistro({ backToLogn }: FormularioRegistroProps) {
   );
 }
 
-export default FormularioRegistro;
+export default RegisterForm;

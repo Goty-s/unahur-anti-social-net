@@ -1,9 +1,9 @@
-export { default as LoginForm } from "./LoginForm";
-export { default as PostCard } from "./PostCard";
+export { default as ProtectedRoute } from "./ProtectedRoute";
 export { default as Navbar } from "./Navbar";
-export { default as ModalLogin } from "./ModalLogin";
-export { default as NuevaPublicacion } from "./NuevaPublicacion";
-export { default as FormularioRegistro } from "./formularioRegistro";
-export { default as NuevaPublicacionForm } from "./NuevaPublicacion";
-export { default as ModalNuevaPublicacion } from "./ModalNuevaPublicacion";
+export { default as RegisterForm } from "./RegisterForm";
+export { default as LoginForm } from "./LoginForm";
+export { default as LoginModal } from "./LoginModal";
+export { default as NewPost } from "./NewPost";
+export { default as NewPostModal } from "./NewPostModal";
+export { default as PostCard } from "./PostCard";
 export { default as CommentCard } from "./CommentCard";

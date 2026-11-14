@@ -94,7 +94,7 @@ export default function Home() {
   }
 
   */
- 
+
   useEffect(() => {
     let cancelled = false;
 
@@ -152,13 +152,12 @@ export default function Home() {
 
   return (
     <>
-      <header>
-        <h2>Bienvenido a Anti-social-net</h2>
-        <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
-      </header>
-      <div /*onScroll={scrollHandler}*/>
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
+            <header className="homeHeader">
+              <h2>Bienvenido a Anti-social-net</h2>
+              <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
+            </header>
             {posts.length === 0 && (
               <p className="text-secondary">Todavía no hay publicaciones.</p>
 
@@ -168,7 +167,6 @@ export default function Home() {
             ))}
           </Col>
         </Row>
-      </div>
     </>
   );
 }

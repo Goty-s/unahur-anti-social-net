@@ -57,19 +57,19 @@
 }
 
 .name {
-    font-weight: 600;
-    color: #fff;
+  font-weight: 600;
+  color: #fff;
 }
 
 .handle {
-    font-weight: 400;
-    color: #b0daf162;
+  font-weight: 400;
+  color: #b0daf162;
 }
 
 .date {
-    font-weight: 400;
-    color: #8a8a946b;
-    font-style: italic;
+  font-weight: 400;
+  color: #8a8a946b;
+  font-style: italic;
 }
 
 .images {
@@ -88,9 +88,10 @@
 }
 
 .image {
-  flex: 0 0 min(260px, 75%);
-  height: 200px;
-  object-fit: cover;
+  flex: 0 0 auto;
+  height: 260px;
+  max-width: min(100%, 420px);
+  object-fit: contain;
   border-radius: 8px;
   scroll-snap-align: start;
   transition: transform 0.3s ease, opacity 0.3s ease;
