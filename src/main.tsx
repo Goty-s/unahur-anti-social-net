@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css"
-import { AuthProvider } from './context/usuarioContext.tsx'
+import { AuthProvider } from './context/userContext.tsx'
 import ScrollToTop from './components/ScrollToTop.tsx'
 
 

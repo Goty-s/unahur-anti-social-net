@@ -1,7 +1,7 @@
 import { useState, type SyntheticEvent } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/usuarioContext";
+import { useAuth } from "../context/userContext";
 
 interface LoginFormProps {
   onLoginSuccess?: () => void;

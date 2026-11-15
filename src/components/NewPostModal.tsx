@@ -2,14 +2,14 @@ import ModalBase from "./ModalBase";
 import { NewPost } from "./index";
 
 interface NewPostModalProps {
-  mostrar: boolean;
-  cerrarModal: () => void;
+  show: boolean;
+  closeModal: () => void;
 }
 
-function NewPostModal({ mostrar, cerrarModal }: NewPostModalProps) {
+function NewPostModal({ show, closeModal }: NewPostModalProps) {
   return (
-    <ModalBase mostrar={mostrar} cerrarModal={cerrarModal} titulo="Nueva Publicación">
-      <NewPost onPostSuccess={cerrarModal} />
+    <ModalBase show={show} closeModal={closeModal} titulo="Nueva Publicación">
+      <NewPost onPostSuccess={closeModal} />
     </ModalBase>
   );
 }

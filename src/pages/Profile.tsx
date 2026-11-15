@@ -1,4 +1,4 @@
-import { useAuth } from "../context/usuarioContext"
+import { useAuth } from "../context/userContext"
 import { useEffect, useState } from "react";
 import { getPostsByUser, getPostImages, getPostComments } from "../services/api";
 import { PostCard} from "../components/index";
@@ -7,14 +7,14 @@ import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import styles from "./Profile.module.css";
 import { Navigate } from "react-router-dom";
 
-const COLORES = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
+const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
 
  function Profile() {
   const {user} = useAuth();
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [colorAvatar] = useState(() => COLORES[Math.floor(Math.random() * COLORES.length)]);
+  const [avatarColor] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
 
   useEffect(() => {
     if (!user) return;
@@ -83,7 +83,7 @@ const COLORES = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac
           <div className={styles.banner}>
           </div>
           <div className={styles.detallesPerfil}>
-            <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
+            <span className={styles.avatar} style={{ backgroundColor: avatarColor }}>
               {user.nickName.charAt(0).toUpperCase()}
             </span>
             <div>

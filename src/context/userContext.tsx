@@ -1,17 +1,30 @@
 import { createContext, useContext, useState } from "react";
-import type { UsuarioContextType, LoginData } from "../types/index";
-import type { User } from "../types/Post.interface";
+import type { User } from "../types/index";
 import { getUsers } from "../services/api";
 
-const usuarioContext = createContext<UsuarioContextType | undefined>(undefined);
+type LoginData = {
+  nickName: string;
+  password: string;
+};
+
+type UserContextType = {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (data: LoginData) => Promise<boolean>;
+  logout: () => void;
+  showLogin : boolean;
+  setShowLogin: (mostrar: boolean) => void;
+};
+
+const userContext = createContext<UserContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [mostrarLogin , setMostrarLogin] = useState(false);
+  const [showLogin , setShowLogin] = useState(false);
   const [user, setUser] = useState<User | null>(() => {
-    const usuarioGuardado = localStorage.getItem("user");
-    if (usuarioGuardado) {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
       try {
-        return JSON.parse(usuarioGuardado) as User;
+        return JSON.parse(savedUser) as User;
       } catch {
         return null;
       }
@@ -50,24 +63,24 @@ async function login(data: LoginData): Promise<boolean> {
     localStorage.removeItem("user");
   }
 
-  const value: UsuarioContextType = {
+  const value: UserContextType = {
     user,
     isAuthenticated: user !== null,
     login,
     logout,
-    mostrarLogin,
-    setMostrarLogin
+    showLogin,
+    setShowLogin
   };
 
   return (
-    <usuarioContext.Provider value={value}>
+    <userContext.Provider value={value}>
       {children}
-    </usuarioContext.Provider>
+    </userContext.Provider>
   );
 }
 
 export function useAuth() {
-  const context = useContext(usuarioContext);
+  const context = useContext(userContext);
 
   if (context === undefined) {
     throw new Error("useAuth debe usarse dentro de un AuthProvider");

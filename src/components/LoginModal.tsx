@@ -5,35 +5,35 @@ import ModalBase from "./ModalBase";
 import styles from "./ModalBase.module.css";
 
 interface LoginModalProps {
-  mostrar: boolean;
-  cerrarModal: () => void;
+  show: boolean;
+  closeModal: () => void;
 }
 
-function LoginModal({ mostrar, cerrarModal }: LoginModalProps) {
-  const [mostrarRegistro, setMostrarRegistro] = useState(false);
+function LoginModal({ show, closeModal }: LoginModalProps) {
+  const [showRegister, setShowRegister] = useState(false);
 
   return (
     <ModalBase
-      mostrar={mostrar}
-      cerrarModal={cerrarModal}
-      titulo={mostrarRegistro ? "Crear Cuenta" : "Iniciar sesión"}
-      onExited={() => setMostrarRegistro(false)}
+      show={show}
+      closeModal={closeModal}
+      titulo={showRegister ? "Crear Cuenta" : "Iniciar sesión"}
+      onExited={() => setShowRegister(false)}
       footer={
-        mostrarRegistro ? (
-          <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(false)}>
+        showRegister ? (
+          <Button variant="link" className={styles.link} onClick={() => setShowRegister(false)}>
             ¿Ya tenés cuenta? Iniciá sesión
           </Button>
         ) : (
-          <Button variant="link" className={styles.link} onClick={() => setMostrarRegistro(true)}>
+          <Button variant="link" className={styles.link} onClick={() => setShowRegister(true)}>
             ¿No tenés cuenta? Registrate acá
           </Button>
         )
       }
     >
-      {mostrarRegistro ? (
-        <RegisterForm backToLogn={() => setMostrarRegistro(false)} />
+      {showRegister ? (
+        <RegisterForm backToLogn={() => setShowRegister(false)} />
       ) : (
-        <LoginForm onLoginSuccess={cerrarModal} />
+        <LoginForm onLoginSuccess={closeModal} />
       )}
     </ModalBase>
   );

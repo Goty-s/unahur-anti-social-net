@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './PostCard.module.css';
 
-const COLORES = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
+const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
 
 type PostCardBaseProps = {
     id?: number | string;
@@ -14,12 +14,12 @@ type PostCardBaseProps = {
 };
 
 export default function PostCardBase({ id, nick, createdAt, children, actions }: PostCardBaseProps) {
-    const [colorAvatar] = useState(() => COLORES[Math.floor(Math.random() * COLORES.length)]);
+    const [avatarColor] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
 
     return (
         <article className={styles.card}>
             <div>
-                <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
+                <span className={styles.avatar} style={{ backgroundColor: avatarColor }}>
                     {nick.charAt(0).toUpperCase()}
                 </span>
             </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "react";
 import type { Tag } from "../types";
 import { createPost, createPostImage, getTags } from "../services/api";
-import { useAuth } from "../context/usuarioContext";
+import { useAuth } from "../context/userContext";
 import styles from "./NewPost.module.css";
 
 interface PostData {

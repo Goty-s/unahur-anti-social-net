@@ -2,13 +2,12 @@ import { useParams } from "react-router-dom"
 import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { PostCard } from "../components";
-import PostCommentCard from "../components/CommentCard";
-import { useAuth } from "../context/usuarioContext";
+import { PostCard, CommentCard } from "../components";
+import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
 
 
-const COLORES = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
+const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
 
 
 function PostDetail() {
@@ -18,10 +17,10 @@ function PostDetail() {
   const [loading, setLoading] = useState<boolean>(true);
   const [newCommentText, setNewCommentText] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [colorAvatar] = useState(() => COLORES[Math.floor(Math.random() * COLORES.length)]);
+  const [colorAvatar] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
   const nick = user?.nickName ?? "anonimo";
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchFullDetail = async () => {
       if (!id) return;
 
@@ -34,14 +33,14 @@ function PostDetail() {
           getPostComments(Number(id)).catch(() => []),
         ]);
 
-        const postCompleto = postData.find((post) => post.id === Number(id))
+        const fullPost = postData.find((post) => post.id === Number(id))
 
-        if (!postCompleto || postCompleto.id === undefined) {
+        if (!fullPost || fullPost.id === undefined) {
           throw new Error('Publicación no encontrada');
         }
 
         setPost({
-          ...postCompleto,
+          ...fullPost,
           images: imagesData,
           comments: commentsData,
         });
@@ -94,7 +93,7 @@ function PostDetail() {
       <PostCard post={post} />
       <h3>Comentarios({post.comments.length})</h3>
       <div>
-        {post.comments.map(com => <PostCommentCard key={com.id} post={com} />)}
+        {post.comments.map(com => <CommentCard key={com.id} post={com} />)}
       </div>
       <div className={styles.nuevoComentario}>
         <div>

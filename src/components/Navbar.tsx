@@ -2,10 +2,10 @@ import styles from "./Navbar.module.css";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginModal, NewPostModal } from "./index";
-import { useAuth } from "../context/usuarioContext";
+import { useAuth } from "../context/userContext";
 
 function Navbar() {
-    const { isAuthenticated, logout, mostrarLogin, setMostrarLogin } = useAuth();
+    const { isAuthenticated, logout, showLogin, setShowLogin } = useAuth();
     const [showNewPostModal, setShowNewPostModal] = useState(false);
     const { pathname } = useLocation();
     const isProfile = pathname === "/profile";
@@ -43,7 +43,7 @@ function Navbar() {
                     ) : (
                         <li>
                             <NavLink to="/"
-                                onClick={(e) => { e.preventDefault(); setMostrarLogin(true); }}>
+                                onClick={(e) => { e.preventDefault(); setShowLogin(true); }}>
                                 <i className="bi bi-box-arrow-in-right"></i>
                             </NavLink>
                         </li>
@@ -51,8 +51,8 @@ function Navbar() {
                 </ul>
             </nav>
 
-            <LoginModal mostrar={mostrarLogin} cerrarModal={() => setMostrarLogin(false)} />
-            <NewPostModal mostrar={showNewPostModal} cerrarModal={() => setShowNewPostModal(false)} />
+            <LoginModal show={showLogin} closeModal={() => setShowLogin(false)} />
+            <NewPostModal show={showNewPostModal} closeModal={() => setShowNewPostModal(false)} />
         </>
     );
 }
