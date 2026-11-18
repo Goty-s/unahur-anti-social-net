@@ -1,54 +1,40 @@
-import { useEffect, useState } from "react";
+/*export default function Home() {
+  const [posts, setPosts] = useState<PostWithDetails[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+*/
+
+/*FUNCIONES PARA QUE HAYA SCROLL INFINITO implementar con pruebas*/
+
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import { PostCard } from "../components/index";
 import { getPosts, getPostImages, getPostComments } from "../services/api";
 import type { Post, PostWithDetails } from "../types/index";
 
+const PAGE_SIZE = 4;
+
 export default function Home() {
+  const [basePosts, setBasePosts] = useState<Post[]>([]);
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
+  const hasMore = posts.length < basePosts.length;
 
-  /*FUNCIONES PARA QUE HAYA SCROLL INFINITO implementar con pruebas
-  const [page, setPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [fetchingMore, setFetchingMore] = useState<boolean>(false);
+  useEffect(() => {
+    let cancelled = false;
 
-
- async function load() {
-    if (fetchingMore || !hasMore) return;
-
-      try {
-        if (currentPage === 1) {
-          setLoading(true);
-        } else {
-          setFetchingMore(true);
+    getPosts()
+      .then((list) => {
+        if (!cancelled) {
+          setBasePosts([...list].sort((a, b) => b.id - a.id));
         }
-        const limit=4
-        
-        const basePosts: Post[] = await getPosts();
-
-        const detailed = await Promise.all(
-          basePosts.map(async (post) => {
-            const [images, comments] = await Promise.all([
-              getPostImages(post.id),
-              getPostComments(post.id),
-            ]);
-            return { ...post, images, comments };
-          })
-        );
-        if (detailed.length < limit) {
-                setHasMore(false);
-        }
-
-        setPosts((prevPosts) => {
-        const combined = [...prevPosts, ...detailed];
-        return combined.sort((a, b) => b.id - a.id);
-        });
-        setPage((prevPage) => prevPage + 1);
-
-      } catch (e) {
+      })
+      .catch((e) => {
+        if (!cancelled) {
           setError(
             e instanceof TypeError
               ? "No se pudo conectar con la API. ¿Está corriendo en el puerto 3001?"
@@ -56,32 +42,61 @@ export default function Home() {
                 ? e.message
                 : "Error al cargar las publicaciones"
           );
-      } finally {
-        setLoading(false);
-        setFetchingMore(false);
-      }
-    }
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
-  useEffect(() => {
-    let cancelled = false;
-    if (!cancelled) {
-      loadMorePosts(1);
-    }
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const scrollHandler = (e: React.UIEvent<HTMLDivElement>) => {
-    const element = e.currentTarget;
-    const scrolledToEnd = element.scrollTop + element.clientHeight >= element.scrollHeight - 20; // Margen de 20px
 
-    if (scrolledToEnd && !fetchingMore && hasMore) {
-      load(page);
+  const loadNextPage = useCallback(async () => {
+    if (loadingMore || !hasMore || error) return;
+
+    setLoadingMore(true);
+    try {
+      const nextPage = basePosts.slice(posts.length, posts.length + PAGE_SIZE);
+
+      const detailed = await Promise.all(
+        nextPage.map(async (post) => {
+          const [images, comments] = await Promise.all([
+            getPostImages(post.id),
+            getPostComments(post.id),
+          ]);
+          return { ...post, images, comments };
+        })
+      );
+
+      setPosts((prev) => [...prev, ...detailed]);
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : "Error al cargar más publicaciones"
+      );
+    } finally {
+      setLoadingMore(false);
     }
-  };
+  }, [basePosts, posts.length, hasMore, loadingMore, error]);
 
-  if (loading && posts.length === 0) {
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadNextPage();
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadNextPage, loading]);
+
+  if (loading) {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" role="status" />
@@ -93,80 +108,39 @@ export default function Home() {
     return <Alert variant="danger">{error}</Alert>;
   }
 
-  */
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const basePosts: Post[] = await getPosts();
-
-        const detailed = await Promise.all(
-          basePosts.map(async (post) => {
-            const [images, comments] = await Promise.all([
-              getPostImages(post.id),
-              getPostComments(post.id),
-            ]);
-            return { ...post, images, comments };
-          })
-        );
-
-        if (!cancelled) {
-          setPosts([...detailed].sort((a, b) => b.id - a.id));
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setError(
-            e instanceof TypeError
-              ? "No se pudo conectar con la API. ¿Está corriendo en el puerto 3001?"
-              : e instanceof Error
-                ? e.message
-                : "Error al cargar las publicaciones"
-          );
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="text-center py-5">
-        <Spinner animation="border" role="status" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
-  }
-
-
-
   return (
     <>
-        <Row className="justify-content-center">
-          <Col md={8} lg={6}>
-            <header className="homeHeader">
-              <h2>Bienvenido a Anti-social-net</h2>
-              <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
-            </header>
-            {posts.length === 0 && (
-              <p className="text-secondary">Todavía no hay publicaciones.</p>
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <header className="homeHeader">
+            <h2>Bienvenido a Anti-social-net</h2>
+            <p>¡Anímate a compartir tus ideas, descubrir contenido y conectarte con los demás!</p>
+          </header>
+          {posts.length === 0 && !loadingMore && (
+            <p className="text-secondary">Todavía no hay publicaciones.</p>
+          )}
 
-            )}
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </Col>
-        </Row>
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+
+          {error && posts.length > 0 && (
+            <Alert variant="danger">{error}</Alert>
+          )}
+
+          {loadingMore && (
+            <div className="text-center py-3">
+              <Spinner animation="border" role="status" size="sm" />
+            </div>
+          )}
+
+          {!hasMore && posts.length > 0 && (
+            <p className="text-center text-secondary py-3">No hay más publicaciones.</p>
+          )}
+
+          <div ref={sentinelRef} style={{ height: 1 }} />
+        </Col>
+      </Row>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { useEffect, useState, type SyntheticEvent } from "react";
 import { PostCard, CommentCard } from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
+import { Col, Row } from "react-bootstrap";
 
 
 const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
@@ -20,7 +21,7 @@ function PostDetail() {
   const [colorAvatar] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
   const nick = user?.nickName ?? "anonimo";
 
-  useEffect(() => { 
+  useEffect(() => {
     const fetchFullDetail = async () => {
       if (!id) return;
 
@@ -90,39 +91,42 @@ function PostDetail() {
 
   return (
     <>
-      <PostCard post={post} />
-      <h3>Comentarios({post.comments.length})</h3>
-      <div>
-        {post.comments.map(com => <CommentCard key={com.id} post={com} />)}
-      </div>
-      <div className={styles.nuevoComentario}>
-        <div>
-          <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
-            {nick.charAt(0).toUpperCase()}
-          </span>
-        </div>
-        <div className={styles.content}>
-          <header className={styles.header}>
-            <span className={styles.name}>{nick}</span>
-            <span className={styles.handle}>@{nick}</span>
-          </header>
-          <form onSubmit={handleAddComment} style={{ marginTop: '10px' }} /* deberia verificar que el usuario este logueado primero */>
-            <textarea
-              value={newCommentText}
-              onChange={(e) => setNewCommentText(e.target.value)}
-              placeholder="Escribe un comentario..."
-              disabled={submitting}
-              className={styles.textarea}
-            />
-            <div className={styles.submitContainer}>
-              <button type="submit" disabled={submitting || !newCommentText.trim()} className={styles.comentar}>
-                {submitting ? 'Enviando...' : 'Comentar'}
-              </button>
+      <Row className="justify-content-center">
+        <Col md={8} lg={6}>
+          <PostCard post={post} />
+          <p className={styles.comment}><i className="bi bi-chat" />Comentarios ({post.comments.length})</p>
+          <div>
+            {post.comments.map(com => <CommentCard key={com.id} post={com} />)}
+          </div>
+          <div className={styles.nuevoComentario}>
+            <div>
+              <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
+                {nick.charAt(0).toUpperCase()}
+              </span>
             </div>
-
-          </form>
-        </div>
-      </div>
+            <div className={styles.content}>
+              <header className={styles.header}>
+                <span className={styles.name}>{nick}</span>
+                <span className={styles.handle}>@{nick}</span>
+              </header>
+              <form onSubmit={handleAddComment} style={{ marginTop: '10px' }}>
+                <textarea
+                  value={newCommentText}
+                  onChange={(e) => setNewCommentText(e.target.value)}
+                  placeholder="Escribe un comentario..."
+                  disabled={submitting}
+                  className={styles.textarea}
+                />
+                <div className={styles.submitContainer}>
+                  <button type="submit" disabled={submitting || !newCommentText.trim()} className={styles.comentar}>
+                    {submitting ? 'Enviando...' : 'Comentar'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </>
   )
 }

@@ -1,32 +1,31 @@
-# React + TypeScript + Vite
+# 👾 Anti-social-net 👾
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Tecnologías utilizadas.
+* React.
+* Vite.
+* React Router.
+* React Bootstrap.
+* Bootstrap Icons.
+* CSS Modules.
+* Context API de React.
+* Git y GitHub.
 
-Currently, two official plugins are available:
+## 🗄️ Link de la API utilizada.
+https://github.com/lucasfigarola/backend-api
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 💻 Instrucciones para instalar y correr el proyecto.
 
-## React Compiler
+1. Copiar el link de code en Github del la aplicacion y de la API.
+2. Utilizando Gitbash clonar ambos repositorios por separado usando el siguiente codigo: `git clone +Link code+`
+3. Abrir la carpeta de la API en Visual Studio Code.
+4. Abrir la terminal del Visual Studio Code.
+5. Instalar las dependencias escribiendo en la terminal: `npm i`
+6. Correr el proyecto escribiendo en la terminal: `npm run dev`
+7. Repetir los pasos 3, 4, 5 y 6 con el archivo de la aplicacion.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🧉 Integrantes del grupo:
+* Aldana Estefanía Quadrini Pessi
+* Matias Kiguez
+* Tobías Nahuel Mercuri
+* Abril Rocío Lara 
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
