@@ -60,12 +60,12 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         setErrors(newErrors);
         return;
       }
-    const loginOk = await login({ nickName, password });
-    if (loginOk) {
-      setErrors({});
-      onLoginSuccess?.();
-      navigate("/profile");
-    }
+      const loginOk = await login({ nickName, password });
+      if (loginOk) {
+        setErrors({});
+        onLoginSuccess?.();
+        navigate("/profile");
+      }
     }catch (error) {
       seterrorsServer(error instanceof Error ? error.message : "No se pudo iniciar sesion");
     }

@@ -11,10 +11,12 @@ import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import { PostCard } from "../components/index";
 import { getPosts, getPostImages, getPostComments } from "../services/api";
 import type { Post, PostWithDetails } from "../types/index";
+import { useAuth } from "../context/userContext";
 
 const PAGE_SIZE = 4;
 
 export default function Home() {
+  const {postUpdate} = useAuth();
   const [basePosts, setBasePosts] = useState<Post[]>([]);
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,10 @@ export default function Home() {
 
   useEffect(() => {
     let cancelled = false;
+    setLoading(true);
+    setError(null);
+    setBasePosts([])
+    setPosts([]);
 
     getPosts()
       .then((list) => {
@@ -51,11 +57,11 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [postUpdate]);
 
 
   const loadNextPage = useCallback(async () => {
-    if (loadingMore || !hasMore || error) return;
+    if (loading || loadingMore || !hasMore || error) return;
 
     setLoadingMore(true);
     try {
@@ -79,7 +85,7 @@ export default function Home() {
     } finally {
       setLoadingMore(false);
     }
-  }, [basePosts, posts.length, hasMore, loadingMore, error]);
+  }, [basePosts, posts.length, hasMore, loadingMore, loading , error]);
 
   useEffect(() => {
     const el = sentinelRef.current;

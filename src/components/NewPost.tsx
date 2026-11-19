@@ -16,10 +16,6 @@ type PostErrors = Partial<{
   images: string;
 }>;
 
-interface NewPostProps {
-  onPostSuccess?: () => void;
-}
-
 async function validateImage(url: string): Promise<boolean> {
   try {
     const response = await fetch(url, {
@@ -32,8 +28,8 @@ async function validateImage(url: string): Promise<boolean> {
   }
 }
 
-function NewPost({ onPostSuccess }: NewPostProps) {
-  const { user } = useAuth();
+function NewPost() {
+  const {notifyPostCreated , user} = useAuth();
   const [formData, setFormData] = useState<PostData>({
     description: "",
     images: [""],
@@ -61,7 +57,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
     setSuccessfulPost(false);
   }
 
-  function handleImagenChange(e: ChangeEvent<HTMLInputElement>, index: number) {
+  function handleImageChange(e: ChangeEvent<HTMLInputElement>, index: number) {
     const newImages: string[] = [...formData.images];
     newImages[index] = e.target.value;
 
@@ -122,7 +118,6 @@ function NewPost({ onPostSuccess }: NewPostProps) {
 
   function validateForm() {
     const newErrors: PostErrors = {};
-
     if (formData.description.trim() === "") {
       newErrors.description = "La descripción no puede estar vacía";
     }
@@ -145,30 +140,31 @@ function NewPost({ onPostSuccess }: NewPostProps) {
     }
 
     try {
-      const imagenesValidas = formData.images.filter((imagen) => imagen.trim() !== "");
-      const resultados = await Promise.all(
-        imagenesValidas.map((imagen) => validateImage(imagen))
+      const validImages = formData.images.filter((image) => image.trim() !== "");
+      const results = await Promise.all(
+        validImages.map((image) => validateImage(image))
       );
 
-      if (resultados.some((resultado) => !resultado)) {
+      if (results.some((resultado) => !resultado)) {
         setErrors({ images: "Se debe ingresar una URL valida" })
         return;
       }
 
-      const NuevaPublicacion = await createPost({
+      const newPost = await createPost({
         description: formData.description,
         userId: user.id,
         tagIds: formData.tags
       });
 
       await Promise.all(
-        imagenesValidas.map((imagen) =>
+        validImages.map((image) =>
           createPostImage({
-            url: imagen,
-            postId: NuevaPublicacion.id
+            url: image,
+            postId: newPost.id
           })
         )
       );
+      notifyPostCreated();
       setSuccessfulPost(true)
     } catch (error) {
       console.error(`Error al crear la publicacion`, error);
@@ -190,7 +186,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
           <div className={styles.campo}>
             {formData.images.map((image, index) => (
               <div className={styles.imagen} key={index}>
-                <input type="url" name={`imagen-${index}`} className={`form-control ${errors.images ? "is-invalid" : ""}`} value={image} onChange={(e) => handleImagenChange(e, index)} placeholder="URL de imagenes:" />
+                <input type="url" name={`imagen-${index}`} className={`form-control ${errors.images ? "is-invalid" : ""}`} value={image} onChange={(e) => handleImageChange(e, index)} placeholder="URL de imagenes:" />
                 {errors.images && (
                   <div className="invalid-feedback">{errors.images}</div>
                 )}
@@ -214,7 +210,6 @@ function NewPost({ onPostSuccess }: NewPostProps) {
       <ModalBase show={successfulPost}
         closeModal={() => {
           setSuccessfulPost(false);
-          onPostSuccess?.();
         }}
         titulo={"¡Publicacion creada correctamente!"}
         children
@@ -224,7 +219,6 @@ function NewPost({ onPostSuccess }: NewPostProps) {
             className="btn btn-primary"
             onClick={() => {
               setSuccessfulPost(false);
-              onPostSuccess?.();
             }}
           >Aceptar</button>
         }

@@ -69,11 +69,16 @@ function PostDetail() {
         postId: postId
       });
 
+      const commentWithUser = {
+        ...createdComment,
+        User: user
+      }
+
       setPost((prevPost) => {
         if (!prevPost) return null;
         return {
           ...prevPost,
-          comments: [...prevPost.comments, createdComment],
+          comments: [...prevPost.comments, commentWithUser],
         };
       });
 

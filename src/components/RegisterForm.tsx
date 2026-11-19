@@ -23,7 +23,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
 
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [errorsServer, seterrorsServer] = useState("")
-  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const [successfulRegister, setsuccessfulRegister] = useState(false);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -31,7 +31,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
       ...formData,
       [name]: value,
     });
-    setRegistroExitoso(false);
+    setsuccessfulRegister(false);
   }
 
   function validateForm() {
@@ -60,7 +60,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
     if (Object.keys(newErrors).length === 0) {
       try {
         await createUser({ nickName: formData.nickName, email: formData.mail });
-        setRegistroExitoso(true);
+        setsuccessfulRegister(true);
         backToLogn?.();
       } catch (error) {
         seterrorsServer(error instanceof Error ? error.message : "No se pudo crear el usuario");
@@ -87,7 +87,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
           )}
         </div>
       </div>
-      {registroExitoso && (
+      {successfulRegister && (
         <div className="alert alert-success">
           ¡Formulario completado correctamente!
         </div>
