@@ -2,13 +2,10 @@ import { useParams } from "react-router-dom"
 import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { PostCard, CommentCard } from "../components";
+import { PostCard, CommentCard, UserIcon} from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
 import { Col, Row } from "react-bootstrap";
-
-
-const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
 
 
 function PostDetail() {
@@ -18,7 +15,6 @@ function PostDetail() {
   const [loading, setLoading] = useState<boolean>(true);
   const [newCommentText, setNewCommentText] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [colorAvatar] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
   const nick = user?.nickName ?? "anonimo";
 
   useEffect(() => {
@@ -100,9 +96,7 @@ function PostDetail() {
           </div>
           <div className={styles.nuevoComentario}>
             <div>
-              <span className={styles.avatar} style={{ backgroundColor: colorAvatar }}>
-                {nick.charAt(0).toUpperCase()}
-              </span>
+                <UserIcon nick={nick} />
             </div>
             <div className={styles.content}>
               <header className={styles.header}>

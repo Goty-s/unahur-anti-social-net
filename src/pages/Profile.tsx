@@ -1,27 +1,26 @@
 import { useAuth } from "../context/userContext"
 import { useEffect, useState } from "react";
 import { getPostsByUser, getPostImages, getPostComments } from "../services/api";
-import { PostCard} from "../components/index";
+import { PostCard, UserIcon } from "../components/index";
 import type { Post, PostWithDetails } from "../types/index";
 import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import styles from "./Profile.module.css";
 import { Navigate } from "react-router-dom";
 
-const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac", "#ff8a65", "#7986cb"];
 
- function Profile() {
-  const {user} = useAuth();
+
+function Profile() {
+  const { user } = useAuth();
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [avatarColor] = useState(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
 
   useEffect(() => {
     if (!user) return;
     const userId = user.id;
 
     let cancelled = false;
-    
+
     async function load() {
       try {
         const basePosts: Post[] = await getPostsByUser(userId);
@@ -64,7 +63,7 @@ const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac"
     return <Navigate to="/" replace />;
   }
 
-   if (loading) {
+  if (loading) {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" role="status" />
@@ -77,35 +76,35 @@ const COLORS = ["#e57373", "#64b5f6", "#81c784", "#ffd54f", "#ba68c8", "#4db6ac"
   }
 
   return (
-     <div>
-       <Row className="justify-content-center">
+    <div>
+      <Row className="justify-content-center">
         <Col md={8} lg={6}>
           <div className={styles.banner}>
           </div>
           <div className={styles.detallesPerfil}>
-            <span className={styles.avatar} style={{ backgroundColor: avatarColor }}>
-              {user.nickName.charAt(0).toUpperCase()}
+            <span className={styles.avatar} >
+              <UserIcon nick={user.nickName} size="lg" />
             </span>
             <div>
               <h2> {user.nickName} </h2>
               <p className="text-secondary mb-0"> @{user.nickName} </p>
               <p className="mb-0"> <strong>{posts.length}</strong> {posts.length === 1 ? "publicación" : "publicaciones"} </p>
-              <p> Se unió el {new Date(user.createdAt).toLocaleDateString("es-AR", {day:"numeric", month:"long", year:"numeric"})}</p>
+              <p> Se unió el {new Date(user.createdAt).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}</p>
             </div>
           </div>
           <div>
             {posts.length === 0 && (
               <p className="text-secondary">Todavía no hay publicaciones.</p>
 
-              )}
-              {posts.map((post) => (
+            )}
+            {posts.map((post) => (
               <PostCard key={post.id} post={post} />
-              ))}
+            ))}
           </div>
         </Col>
-       </Row>
-     </div>
-   );
- }
+      </Row>
+    </div>
+  );
+}
 
 export default Profile
