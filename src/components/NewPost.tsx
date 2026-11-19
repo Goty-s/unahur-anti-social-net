@@ -2,8 +2,8 @@ import { useEffect, useState, type ChangeEvent, type SyntheticEvent } from "reac
 import type { Tag } from "../types";
 import { createPost, createPostImage, getTags } from "../services/api";
 import { useAuth } from "../context/userContext";
+import { useNotification } from "../context/notificationContext";
 import styles from "./NewPost.module.css";
-import ModalBase from "./ModalBase";
 
 interface PostData {
   description: string;
@@ -15,6 +15,10 @@ type PostErrors = Partial<{
   description: string;
   images: string;
 }>;
+
+interface NewPostProps {
+  onPostSuccess?: () => void;
+}
 
 async function validateImage(url: string): Promise<boolean> {
   try {
@@ -28,8 +32,9 @@ async function validateImage(url: string): Promise<boolean> {
   }
 }
 
-function NewPost() {
-  const {notifyPostCreated , user} = useAuth();
+function NewPost({ onPostSuccess }: NewPostProps) {
+  const { user } = useAuth();
+  const { notify } = useNotification();
   const [formData, setFormData] = useState<PostData>({
     description: "",
     images: [""],
@@ -37,7 +42,6 @@ function NewPost() {
   });
 
   const [errors, setErrors] = useState<PostErrors>({});
-  const [successfulPost, setSuccessfulPost] = useState(false);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -54,7 +58,6 @@ function NewPost() {
       ...formData,
       [name]: value,
     });
-    setSuccessfulPost(false);
   }
 
   function handleImageChange(e: ChangeEvent<HTMLInputElement>, index: number) {
@@ -69,7 +72,6 @@ function NewPost() {
       ...previousErrors,
       images: undefined
     }))
-    setSuccessfulPost(false);
   }
 
   function addImage() {
@@ -81,7 +83,6 @@ function NewPost() {
       ...previousErrors,
       images: undefined
     }))
-    setSuccessfulPost(false);
   }
 
   function eliminarImagen(index: number) {
@@ -95,7 +96,6 @@ function NewPost() {
       ...previousErrors,
       images: undefined
     }))
-    setSuccessfulPost(false);
   }
 
   function handleTagChange(e: ChangeEvent<HTMLInputElement>) {
@@ -112,8 +112,6 @@ function NewPost() {
         tags: formData.tags.filter((tag) => tag !== tagId),
       });
     }
-
-    setSuccessfulPost(false);
   }
 
   function validateForm() {
@@ -127,7 +125,6 @@ function NewPost() {
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSuccessfulPost(false)
     const newErrors: PostErrors = validateForm();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
@@ -164,8 +161,8 @@ function NewPost() {
           })
         )
       );
-      notifyPostCreated();
-      setSuccessfulPost(true)
+      notify("¡Publicacion creada correctamente!");
+      onPostSuccess?.();
     } catch (error) {
       console.error(`Error al crear la publicacion`, error);
     }
@@ -207,22 +204,6 @@ function NewPost() {
         </div>
         <button type="submit" className="btn btn-primary">Crear publicacion</button>
       </form>
-      <ModalBase show={successfulPost}
-        closeModal={() => {
-          setSuccessfulPost(false);
-        }}
-        titulo={"¡Publicacion creada correctamente!"}
-        children
-        footer={
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => {
-              setSuccessfulPost(false);
-            }}
-          >Aceptar</button>
-        }
-      />
     </>
   );
 }
