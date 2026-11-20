@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { createUser } from "../services/api";
+import { useNotification } from "../context/notificationContext";
 
 interface RegisterData {
   nickName: string;
@@ -20,10 +21,10 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
     nickName: "",
     mail: "",
   });
-
+  const { notify } = useNotification();
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [errorsServer, seterrorsServer] = useState("")
-  const [successfulRegister, setsuccessfulRegister] = useState(false);
+
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -31,7 +32,6 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
       ...formData,
       [name]: value,
     });
-    setsuccessfulRegister(false);
   }
 
   function validateForm() {
@@ -60,7 +60,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
     if (Object.keys(newErrors).length === 0) {
       try {
         await createUser({ nickName: formData.nickName, email: formData.mail });
-        setsuccessfulRegister(true);
+        notify("¡Registro exitoso!");
         backToLogn?.();
       } catch (error) {
         seterrorsServer(error instanceof Error ? error.message : "No se pudo crear el usuario");
@@ -87,11 +87,6 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
           )}
         </div>
       </div>
-      {successfulRegister && (
-        <div className="alert alert-success">
-          ¡Formulario completado con éxito!
-        </div>
-      )}
       {errorsServer && (
         <div className="alert alert-danger">
           {errorsServer}

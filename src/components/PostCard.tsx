@@ -8,9 +8,9 @@ export default function PostCard({ post, mostrarVerMas = true }: { post: PostWit
 
   return (
     <PostCardBase id={mostrarVerMas ? post.id : undefined} nick={nick} createdAt={post.createdAt} actions={
-      <button className={styles.action}>
+      <div className={styles.action}>
         <i className="bi bi-chat"></i> {commentCount}
-      </button>
+      </div>
     }>
       <p>{post.description}</p>
       {post.Tags && post.Tags.length > 0 && (
