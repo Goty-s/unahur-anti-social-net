@@ -43,6 +43,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
 
   const [errors, setErrors] = useState<PostErrors>({});
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadTags() {
@@ -142,6 +143,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
     }
 
     try {
+      setSubmitting(true);
       const validImages = formData.images.filter((image) => image.trim() !== "");
       const results = await Promise.all(
         validImages.map((image) => validateImage(image))
@@ -171,6 +173,8 @@ function NewPost({ onPostSuccess }: NewPostProps) {
       onPostSuccess?.();
     } catch (error) {
       console.error(`Error al crear la publicacion`, error);
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -208,7 +212,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
             ))}
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Crear publicación</button>
+        <button type="submit" className="btn btn-primary" disabled={submitting}>{submitting ? "Publicando..." : "Crear publicación"}</button>
       </form>
     </>
   );
