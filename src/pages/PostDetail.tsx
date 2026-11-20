@@ -96,7 +96,7 @@ function PostDetail() {
     <>
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
-          <PostCard post={post} />
+          <PostCard post={post} mostrarVerMas={false} />
           <p className={styles.comment}><i className="bi bi-chat" />Comentarios ({post.comments.length})</p>
           <div>
             {post.comments.map(com => <CommentCard key={com.id} post={com} />)}
@@ -119,7 +119,7 @@ function PostDetail() {
                   className={styles.textarea}
                 />
                 <div className={styles.submitContainer}>
-                  <button type="submit" disabled={submitting || !newCommentText.trim() && !user} className={styles.comentar}>
+                  <button type="submit" disabled={submitting || !newCommentText.trim() || !user} className={styles.comentar}>
                     {submitting ? 'Enviando...' : 'Comentar'}
                   </button>
                 </div>

@@ -91,7 +91,7 @@
     border: 1px solid #2f3336;
     background-color: #1e1e22;
     color: #fff;
-    resize: vertical;
+    resize: none;
 }
 
 .comment{
