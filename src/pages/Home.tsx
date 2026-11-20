@@ -1,11 +1,3 @@
-/*export default function Home() {
-  const [posts, setPosts] = useState<PostWithDetails[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-*/
-
-/*FUNCIONES PARA QUE HAYA SCROLL INFINITO implementar con pruebas*/
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import { PostCard } from "../components/index";
@@ -15,7 +7,7 @@ import { useAuth } from "../context/userContext";
 
 const PAGE_SIZE = 4;
 
-export default function Home() {
+function Home() {
   const {postUpdate} = useAuth();
   const [basePosts, setBasePosts] = useState<Post[]>([]);
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
@@ -150,3 +142,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home

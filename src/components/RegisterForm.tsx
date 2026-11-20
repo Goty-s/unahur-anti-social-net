@@ -89,7 +89,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
       </div>
       {successfulRegister && (
         <div className="alert alert-success">
-          ¡Formulario completado correctamente!
+          ¡Formulario completado con éxito!
         </div>
       )}
       {errorsServer && (

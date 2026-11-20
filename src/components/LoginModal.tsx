@@ -16,7 +16,7 @@ function LoginModal({ show, closeModal }: LoginModalProps) {
     <ModalBase
       show={show}
       closeModal={closeModal}
-      titulo={showRegister ? "Crear Cuenta" : "Iniciar sesión"}
+      titulo={showRegister ? "Crear cuenta" : "Iniciar sesión"}
       onExited={() => setShowRegister(false)}
       footer={
         showRegister ? (

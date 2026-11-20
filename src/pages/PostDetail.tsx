@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { createComments, getPostComments, getPostImages, getPosts } from "../services/api"
+import { createComments, getPost, getPostComments, getPostImages} from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
 import { PostCard, CommentCard, UserIcon} from "../components";
@@ -24,20 +24,20 @@ function PostDetail() {
       try {
         setLoading(true);
 
-        const [postData, imagesData, commentsData] = await Promise.all([
-          getPosts(),
+        const basePost = await getPost(Number(id));
+
+        const [imagesData, commentsData] = await Promise.all([
           getPostImages(Number(id)).catch(() => []),
           getPostComments(Number(id)).catch(() => []),
         ]);
 
-        const fullPost = postData.find((post) => post.id === Number(id))
 
-        if (!fullPost || fullPost.id === undefined) {
+        if (basePost.id === undefined) {
           throw new Error('Publicación no encontrada');
         }
 
         setPost({
-          ...fullPost,
+          ... basePost,
           images: imagesData,
           comments: commentsData,
         });
@@ -59,7 +59,9 @@ function PostDetail() {
   async function handleAddComment(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!newCommentText.trim() || !user) return;
-
+    if(!user){
+      throw new Error('Debe iniciar sesión para comentar');
+    }
     try {
       setSubmitting(true);
 
@@ -117,7 +119,7 @@ function PostDetail() {
                   className={styles.textarea}
                 />
                 <div className={styles.submitContainer}>
-                  <button type="submit" disabled={submitting || !newCommentText.trim()} className={styles.comentar}>
+                  <button type="submit" disabled={submitting || !newCommentText.trim() && !user} className={styles.comentar}>
                     {submitting ? 'Enviando...' : 'Comentar'}
                   </button>
                 </div>

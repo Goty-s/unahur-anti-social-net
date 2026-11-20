@@ -15,27 +15,27 @@ function Navbar() {
             <nav className={styles.navbar}>
                 <ul>
                     <li>
-                        <NavLink to="/">
-                            <i className="bi bi-house-door-fill"></i>
+                        <NavLink to="/" title="Home" aria-label="Home">
+                            <i className="bi bi-house-door-fill" aria-hidden="true"></i>
                         </NavLink>
                     </li>
                     {isAuthenticated ? (
                         <>
                             <li>
-                                <NavLink to="/" onClick={(e) => { e.preventDefault(); setShowNewPostModal(true); }}>
-                                    <i className="bi bi-pencil-square"></i>
+                                <NavLink to="/" onClick={(e) => { e.preventDefault(); setShowNewPostModal(true); }} title="Create new post" aria-label="Create new post">
+                                    <i className="bi bi-pencil-square" aria-hidden="true"></i>
                                 </NavLink>
                             </li>
                             {isProfile ? (
                                 <li>
-                                    <NavLink to="/" onClick={(e) => { e.preventDefault(); logout(); navigate("/"); }}>
-                                        <i className="bi bi-box-arrow-left"></i>
+                                    <NavLink to="/" onClick={(e) => { e.preventDefault(); logout(); navigate("/"); }} title="Logout" aria-label="Logout">
+                                        <i className="bi bi-box-arrow-left" aria-hidden="true"></i>
                                     </NavLink>
                                 </li>
                             ) : (
                                 <li>
-                                    <NavLink to="/profile">
-                                        <i className="bi bi-person"></i>
+                                    <NavLink to="/profile" title="Profile" aria-label="Profile">
+                                        <i className="bi bi-person" aria-hidden="true"></i>
                                     </NavLink>
                                 </li>
                             )}
@@ -43,8 +43,8 @@ function Navbar() {
                     ) : (
                         <li>
                             <NavLink to="/"
-                                onClick={(e) => { e.preventDefault(); setShowLogin(true); }}>
-                                <i className="bi bi-box-arrow-in-right"></i>
+                                onClick={(e) => { e.preventDefault(); setShowLogin(true); }} title="Login" aria-label="Login">
+                                <i className="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                             </NavLink>
                         </li>
                     )}

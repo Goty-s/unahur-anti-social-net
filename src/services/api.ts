@@ -19,6 +19,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export const getUsers = () =>request<User[]>("/users");
 export const getTags = () =>request<Tag[]>("/tags");
 export const getPosts = () =>request<Post[]>("/posts");
+export const getPost = (postId: number) =>request<Post>(`/posts/${postId}`);
 export const getPostComments = (postId: number) =>request<PostComment[]>(`/comments/post/${postId}`);
 export const getPostImages = (postId: number) =>request<PostImage[]>(`/postimages/post/${postId}`);
 export const createUser = (user: {nickName : string , email : string}) => request<User>("/users" , {method: "POST", body:JSON.stringify(user)});

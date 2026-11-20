@@ -33,7 +33,7 @@ async function validateImage(url: string): Promise<boolean> {
 }
 
 function NewPost({ onPostSuccess }: NewPostProps) {
-  const { user , notifyPostCreated} = useAuth();
+  const { user, notifyPostCreated } = useAuth();
   const { notify } = useNotification();
   const [formData, setFormData] = useState<PostData>({
     description: "",
@@ -46,8 +46,13 @@ function NewPost({ onPostSuccess }: NewPostProps) {
 
   useEffect(() => {
     async function loadTags() {
-      const tags = await getTags();
-      setAvailableTags(tags);
+      try {
+        const tags = await getTags();
+        setAvailableTags(tags);
+      }
+      catch (error){
+        throw new Error('Etiquetas no encontradas.');
+      }
     }
     loadTags();
   }, []);
@@ -172,10 +177,10 @@ function NewPost({ onPostSuccess }: NewPostProps) {
   return (
     <>
       <form id="formulario" className={styles.formulario} onSubmit={handleSubmit} noValidate>
-        <p>Completa los datos para crear una nueva publicacion</p>
+        <p>Completa los campos para crear una nueva publicación.</p>
         <div className={styles.campos}>
           <div className={styles.campo}>
-            <label htmlFor="description">Descripcion *</label>
+            <label htmlFor="description">Descripción *</label>
             <textarea name="description" id="description" className={`form-control ${errors.description ? "is-invalid" : ""}`} value={formData.description} onChange={handleChange} />
             {errors.description && (
               <div className="invalid-feedback">{errors.description}</div>
@@ -203,7 +208,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
             ))}
           </div>
         </div>
-        <button type="submit" className="btn btn-primary">Crear publicacion</button>
+        <button type="submit" className="btn btn-primary">Crear publicación</button>
       </form>
     </>
   );
