@@ -33,7 +33,7 @@ async function validateImage(url: string): Promise<boolean> {
 }
 
 function NewPost({ onPostSuccess }: NewPostProps) {
-  const { user } = useAuth();
+  const { user , notifyPostCreated} = useAuth();
   const { notify } = useNotification();
   const [formData, setFormData] = useState<PostData>({
     description: "",
@@ -161,6 +161,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
           })
         )
       );
+      notifyPostCreated();
       notify("¡Publicacion creada correctamente!");
       onPostSuccess?.();
     } catch (error) {
