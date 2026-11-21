@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import styles from './PostCard.module.css';
 import UserIcon from './UserIcon';
 
-
 type PostCardBaseProps = {
     id?: number | string;
     nick: string;
@@ -15,9 +14,7 @@ type PostCardBaseProps = {
 export default function PostCardBase({ id, nick, createdAt, children, actions }: PostCardBaseProps) {
     const { pathname } = useLocation();
     const hasId = id !== undefined;
-    const isPostPage = pathname === "/post/";
-    const location = useLocation();
-    const origin = location.pathname == "/" ? "/" : "/profile";
+    const origin = pathname === "/" ? "/" : "/profile";
     return (
         <article className={styles.card}>
             <div>
@@ -33,8 +30,8 @@ export default function PostCardBase({ id, nick, createdAt, children, actions }:
                 {children}
                 <footer className={styles.footer}>
                     {actions && <div className={styles.actions}>{actions}</div>}
-                    {hasId && !isPostPage && (
-                        <Link className={styles.verMas} to={`/post/${id}`} state={{origin}}>
+                    {hasId && (
+                        <Link className={styles.verMas} to={`/post/${id}`} state={{ origin }}>
                             <i className="bi bi-eye"> Ver más</i>
                         </Link>
                     )}

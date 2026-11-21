@@ -2,7 +2,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom"
 import { createComments, getPost, getPostComments, getPostImages } from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { PostCard, CommentCard, UserIcon, LoginModal } from "../components";
+import { PostCard, CommentCard, UserIcon} from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
 import { Col, Row } from "react-bootstrap";
@@ -12,7 +12,7 @@ import { useLogin } from "../context/LoginContext";
 function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const { user, isAuthenticated, } = useAuth();
-  const { showLogin, setShowLogin } = useLogin();
+  const { setShowLogin } = useLogin();
   const [post, setPost] = useState<PostWithDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [newCommentText, setNewCommentText] = useState<string>('');
@@ -144,7 +144,7 @@ function PostDetail() {
               </>) : (
               <div className={styles.loginRequired}>
                 <p className={styles.loginText}>Iniciá sesión para comentar</p>
-                <button type="button" className={styles.commentButton}>
+                <button type="button" className={styles.commentButton} onClick={() => setShowLogin(true)}>
                   Iniciar sesión
                 </button>
               </div>
@@ -152,7 +152,6 @@ function PostDetail() {
           </div>
         </Col>
       </Row>
-      <LoginModal show={showLogin} closeModal={() => setShowLogin(false)} />
     </>
 
   )
