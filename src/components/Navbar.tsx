@@ -3,9 +3,11 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginModal, NewPostModal } from "./index";
 import { useAuth } from "../context/userContext";
+import { useLogin } from "../context/LoginContext";
 
 function Navbar() {
-    const { isAuthenticated, logout, showLogin, setShowLogin } = useAuth();
+    const { isAuthenticated, logout} = useAuth();
+    const {showLogin, setShowLogin} = useLogin();
     const [showNewPostModal, setShowNewPostModal] = useState(false);
     const { pathname } = useLocation();
     const isProfile = pathname === "/profile";

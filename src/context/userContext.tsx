@@ -12,17 +12,11 @@ type UserContextType = {
   isAuthenticated: boolean;
   login: (data: LoginData) => Promise<boolean>;
   logout: () => void;
-  showLogin : boolean;
-  setShowLogin: (mostrar: boolean) => void;
-  postUpdate: number;
-  notifyPostCreated: () => void;
 };
 
 const userContext = createContext<UserContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [postUpdate , setpostUpdate] = useState(0);
-  const [showLogin , setShowLogin] = useState(false);
   const [user, setUser] = useState<User | null>(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -61,10 +55,6 @@ async function login(data: LoginData): Promise<boolean> {
   }
 }
 
-  function notifyPostCreated() {
-    setpostUpdate((previous) => previous + 1)
-  }
-
   function logout() {
     setUser(null);
     localStorage.removeItem("user");
@@ -75,10 +65,6 @@ async function login(data: LoginData): Promise<boolean> {
     isAuthenticated: user !== null,
     login,
     logout,
-    showLogin,
-    setShowLogin,
-    postUpdate,
-    notifyPostCreated
   };
 
   return (

@@ -16,6 +16,8 @@ export default function PostCardBase({ id, nick, createdAt, children, actions }:
     const { pathname } = useLocation();
     const hasId = id !== undefined;
     const isPostPage = pathname === "/post/";
+    const location = useLocation();
+    const origin = location.pathname == "/" ? "/" : "/profile";
     return (
         <article className={styles.card}>
             <div>
@@ -32,7 +34,7 @@ export default function PostCardBase({ id, nick, createdAt, children, actions }:
                 <footer className={styles.footer}>
                     {actions && <div className={styles.actions}>{actions}</div>}
                     {hasId && !isPostPage && (
-                        <Link className={styles.verMas} to={`/post/${id}`}>
+                        <Link className={styles.verMas} to={`/post/${id}`} state={{origin}}>
                             <i className="bi bi-eye"> Ver más</i>
                         </Link>
                     )}

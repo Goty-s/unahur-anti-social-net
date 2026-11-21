@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom"
+import { useParams , useLocation , useNavigate} from "react-router-dom"
 import { createComments, getPost, getPostComments, getPostImages} from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
 import { PostCard, CommentCard, UserIcon} from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row} from "react-bootstrap";
 
 
 function PostDetail() {
@@ -16,6 +16,12 @@ function PostDetail() {
   const [newCommentText, setNewCommentText] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
   const nick = user?.nickName ?? "anonimo";
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function returnPrevious() {
+    navigate(location.state?.origin || "/")
+  };
 
   useEffect(() => {
     const fetchFullDetail = async () => {
@@ -96,6 +102,7 @@ function PostDetail() {
     <>
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
+          <button className={styles.volver} onClick={returnPrevious}> <i className="bi bi-arrow-left-short"/>Volver </button>
           <PostCard post={post} mostrarVerMas={false} />
           <p className={styles.comment}><i className="bi bi-chat" />Comentarios ({post.comments.length})</p>
           <div>

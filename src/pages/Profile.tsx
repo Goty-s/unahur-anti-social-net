@@ -6,11 +6,13 @@ import type { Post, PostWithDetails } from "../types/index";
 import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import styles from "./Profile.module.css";
 import { Navigate } from "react-router-dom";
+import { usePost } from "../context/PostContext";
 
 
 
 function Profile() {
-  const { user } = useAuth();
+  const { user} = useAuth();
+  const {postUpdate} = usePost();
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +59,7 @@ function Profile() {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [user , postUpdate]);
 
   if (!user) {
     return <Navigate to="/" replace />;

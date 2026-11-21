@@ -4,6 +4,7 @@ import { createPost, createPostImage, getTags } from "../services/api";
 import { useAuth } from "../context/userContext";
 import { useNotification } from "../context/notificationContext";
 import styles from "./NewPost.module.css";
+import { usePost } from "../context/PostContext";
 
 interface PostData {
   description: string;
@@ -33,7 +34,8 @@ async function validateImage(url: string): Promise<boolean> {
 }
 
 function NewPost({ onPostSuccess }: NewPostProps) {
-  const { user, notifyPostCreated } = useAuth();
+  const { user} = useAuth();
+  const {notifyPostCreated} = usePost();
   const { notify } = useNotification();
   const [formData, setFormData] = useState<PostData>({
     description: "",

@@ -3,12 +3,12 @@ import { Row, Col, Alert, Spinner } from "react-bootstrap";
 import { PostCard } from "../components/index";
 import { getPosts, getPostImages, getPostComments } from "../services/api";
 import type { Post, PostWithDetails } from "../types/index";
-import { useAuth } from "../context/userContext";
+import { usePost } from "../context/PostContext";
 
 const PAGE_SIZE = 4;
 
 function Home() {
-  const {postUpdate} = useAuth();
+  const {postUpdate} = usePost();
   const [basePosts, setBasePosts] = useState<Post[]>([]);
   const [posts, setPosts] = useState<PostWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
