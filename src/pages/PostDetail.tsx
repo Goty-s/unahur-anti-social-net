@@ -1,16 +1,18 @@
-import { useParams , useLocation , useNavigate} from "react-router-dom"
-import { createComments, getPost, getPostComments, getPostImages} from "../services/api"
+import { useParams, useLocation, useNavigate } from "react-router-dom"
+import { createComments, getPost, getPostComments, getPostImages } from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { PostCard, CommentCard, UserIcon} from "../components";
+import { PostCard, CommentCard, UserIcon, LoginModal } from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
-import { Col, Row} from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import { useLogin } from "../context/LoginContext";
 
 
 function PostDetail() {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, isAuthenticated, } = useAuth();
+  const { showLogin, setShowLogin } = useLogin();
   const [post, setPost] = useState<PostWithDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [newCommentText, setNewCommentText] = useState<string>('');
@@ -43,7 +45,7 @@ function PostDetail() {
         }
 
         setPost({
-          ... basePost,
+          ...basePost,
           images: imagesData,
           comments: commentsData,
         });
@@ -65,7 +67,7 @@ function PostDetail() {
   async function handleAddComment(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!newCommentText.trim() || !user) return;
-    if(!user){
+    if (!user) {
       throw new Error('Debe iniciar sesión para comentar');
     }
     try {
@@ -102,40 +104,57 @@ function PostDetail() {
     <>
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
-          <button className={styles.volver} onClick={returnPrevious}> <i className="bi bi-arrow-left-short"/>Volver </button>
+        <div className={styles.pageHeader}>
+          <button className={styles.back} onClick={returnPrevious}> <i className="bi bi-arrow-left-short" /></button>
+          <h4 className={styles.pageTitle}>Post</h4>
+
+        </div>
           <PostCard post={post} mostrarVerMas={false} />
           <p className={styles.comment}><i className="bi bi-chat" />Comentarios ({post.comments.length})</p>
           <div>
             {post.comments.map(com => <CommentCard key={com.id} post={com} />)}
           </div>
-          <div className={styles.nuevoComentario}>
-            <div>
-                <UserIcon nick={nick} />
-            </div>
-            <div className={styles.content}>
-              <header className={styles.header}>
-                <span className={styles.name}>{nick}</span>
-                <span className={styles.handle}>@{nick}</span>
-              </header>
-              <form onSubmit={handleAddComment} style={{ marginTop: '10px' }}>
-                <textarea
-                  value={newCommentText}
-                  onChange={(e) => setNewCommentText(e.target.value)}
-                  placeholder="Escribe un comentario..."
-                  disabled={submitting}
-                  className={styles.textarea}
-                />
-                <div className={styles.submitContainer}>
-                  <button type="submit" disabled={submitting || !newCommentText.trim() || !user} className={styles.comentar}>
-                    {submitting ? 'Enviando...' : 'Comentar'}
-                  </button>
+          <div className={styles.newComment}>
+            {isAuthenticated ? (
+              <>
+                <div>
+                  <UserIcon nick={nick} />
                 </div>
-              </form>
-            </div>
+                <div className={styles.content}>
+                  <header className={styles.header}>
+                    <span className={styles.name}>{nick}</span>
+                    <span className={styles.handle}>@{nick}</span>
+                  </header>
+                  <form onSubmit={handleAddComment} style={{ marginTop: '10px' }}>
+                    <textarea
+                      value={newCommentText}
+                      onChange={(e) => setNewCommentText(e.target.value)}
+                      placeholder="Escribe un comentario..."
+                      disabled={submitting}
+                      className={styles.textarea}
+                    />
+                    <div className={styles.submitContainer}>
+                      <button type="submit" disabled={submitting || !newCommentText.trim() || !user} className={styles.commentButton}>
+                        {submitting ? 'Enviando...' : 'Comentar'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+              </>) : (
+              <div className={styles.loginRequired}>
+                <p className={styles.loginText}>Iniciá sesión para comentar</p>
+                <button type="button" className={styles.commentButton}>
+                  Iniciar sesión
+                </button>
+              </div>
+            )}
           </div>
         </Col>
       </Row>
+      <LoginModal show={showLogin} closeModal={() => setShowLogin(false)} />
     </>
+
   )
 }
 

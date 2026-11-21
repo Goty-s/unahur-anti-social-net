@@ -1,4 +1,4 @@
-.nuevoComentario {
+.newComment {
     position: relative;
     display: flex;
     gap: 12px;
@@ -9,6 +9,18 @@
     margin-bottom: 16px;
     background-color: #1e1e22;
     color: #fff;
+}
+
+.pageHeader {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+}
+
+.pageTitle {
+    color: #fff;
+    grid-column: 2;
+    justify-self: center;
+    margin: 0;
 }
 
 .header {
@@ -54,19 +66,21 @@
     margin-top: 8px;
 }
 
-.volver {
+.back {
+    justify-self: start;
     border-radius: 999px;
-    background-color: #5F4BB6;
-    border: 1px solid #5F4BB6;
+    background-color: #5f4bb600;
+    border: 1px solid #5f4bb600;
     color: #fff;
     text-decoration: none;
     padding: 0.2rem 0.8rem;
     font-weight: 600;
+    font-size: 1.2rem;
     cursor: pointer;
-    margin-bottom: 2px;
+    margin-bottom: 15px;
 }
 
-.comentar {
+.commentButton {
     border-radius: 999px;
     background-color: #5F4BB6;
     border: 1px solid #5F4BB6;
@@ -78,16 +92,16 @@
     transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
 }
 
-.comentar:hover:not(:disabled) {
+.commentButton:hover:not(:disabled) {
     background-color: #6f5dc9;
     border-color: #6f5dc9;
 }
 
-.comentar:active:not(:disabled) {
+.commentButton:active:not(:disabled) {
     transform: scale(0.97);
 }
 
-.comentar:disabled {
+.commentButton:disabled {
     background-color: #2a2a30;
     border-color: #2a2a30;
     color: #8a8a94;
@@ -106,7 +120,7 @@
     resize: none;
 }
 
-.comment{
+.comment {
     position: relative;
     display: flex;
     gap: 12px;
@@ -117,4 +131,20 @@
     margin-bottom: 16px;
     color: #fff;
     font-size: 1.1em;
+}
+
+.loginRequired {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    text-align: center;
+}
+
+.loginText {
+    margin: 0;
+    color: #b0daf162;
 }

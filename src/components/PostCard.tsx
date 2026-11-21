@@ -5,11 +5,10 @@ import PostCardBase from "./PostCardBase";
 export default function PostCard({ post, mostrarVerMas = true }: { post: PostWithDetails; mostrarVerMas?: boolean }) {
   const nick = post.User?.nickName ?? "anonimo";
   const commentCount = post.comments.length;
-
   return (
     <PostCardBase id={mostrarVerMas ? post.id : undefined} nick={nick} createdAt={post.createdAt} actions={
-      <div className={styles.action}>
-        <i className="bi bi-chat"></i> {commentCount}
+      <div >
+        <i className="bi bi-chat" style={{marginRight: "5px"}}></i> {commentCount}
       </div>
     }>
       <p>{post.description}</p>
