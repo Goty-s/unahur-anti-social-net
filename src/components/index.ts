@@ -8,3 +8,4 @@ export { default as NewPostModal } from "./NewPostModal";
 export { default as PostCard } from "./PostCard";
 export { default as CommentCard } from "./CommentCard";
 export { default as UserIcon } from "./UserIcon";
+export { default as NotFoundCard } from "./NotFoundCard";

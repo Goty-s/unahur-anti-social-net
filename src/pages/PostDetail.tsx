@@ -2,7 +2,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom"
 import { createComments, getPost, getPostComments, getPostImages } from "../services/api"
 import type { PostWithDetails } from "../types"
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { PostCard, CommentCard, UserIcon} from "../components";
+import { PostCard, CommentCard, UserIcon, NotFoundCard } from "../components";
 import { useAuth } from "../context/userContext";
 import styles from "./PostDetail.module.css";
 import { Col, Row } from "react-bootstrap";
@@ -60,7 +60,15 @@ function PostDetail() {
   }, [id]);
 
   if (loading) return <p>Cargando detalles...</p>;
-  if (!post) return <p>Publicación no encontrada.</p>;
+  if (!post) {
+  return (
+    <Row className="justify-content-center">
+      <Col md={8} lg={6}>
+        <NotFoundCard />
+      </Col>
+    </Row>
+  );
+}
 
   const postId = post.id;
 
