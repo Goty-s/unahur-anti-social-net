@@ -117,7 +117,7 @@ function PostDetail() {
           <h4 className={styles.pageTitle}>Post</h4>
 
         </div>
-          <PostCard post={post} mostrarVerMas={false} />
+          <PostCard post={post} showViewMore={false} />
           <p className={styles.comment}><i className="bi bi-chat" />Comentarios ({post.comments.length})</p>
           <div>
             {post.comments.map(com => <CommentCard key={com.id} post={com} />)}

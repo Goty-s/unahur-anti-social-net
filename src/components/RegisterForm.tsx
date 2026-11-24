@@ -44,7 +44,7 @@ function RegisterForm({ backToLogn }: RegisterFormProps) {
     if (formData.mail.trim() === "") {
       newErrors.mail = "El campo email está vacío";
     } else {
-      if (!formData.mail.includes("@") || !formData.mail.includes(".")) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.mail)) {
         newErrors.mail = "Ingrese un email válido";
       }
     }

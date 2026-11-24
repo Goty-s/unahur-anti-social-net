@@ -2,11 +2,11 @@ import type { PostWithDetails } from "../types/index";
 import styles from "./PostCard.module.css";
 import PostCardBase from "./PostCardBase";
 
-export default function PostCard({ post, mostrarVerMas = true }: { post: PostWithDetails; mostrarVerMas?: boolean }) {
+export default function PostCard({ post, showViewMore = true }: { post: PostWithDetails; showViewMore?: boolean }) {
   const nick = post.User?.nickName ?? "anonimo";
   const commentCount = post.comments.length;
   return (
-    <PostCardBase id={mostrarVerMas ? post.id : undefined} nick={nick} createdAt={post.createdAt} actions={
+    <PostCardBase id={showViewMore ? post.id : undefined} nick={nick} createdAt={post.createdAt} actions={
       <div >
         <i className="bi bi-chat" style={{marginRight: "5px"}}></i> {commentCount}
       </div>
