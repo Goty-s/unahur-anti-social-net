@@ -39,7 +39,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
     event.preventDefault();
     seterrorsServer("");
     const newErrors = validateForm();
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -48,13 +48,13 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
     try {
       const usuarios = await getUsers();
       const existeNickName = usuarios.find(
-      (usuario) => usuario.nickName === nickName
+        (usuario) => usuario.nickName === nickName
       );
       if (!existeNickName) {
-        newErrors.nickName = "No existe el nickName ingresado";
+        newErrors.nickName = "No existe el nickname ingresado";
       }
       if (password.trim() !== "123456") {
-      newErrors.password = "La contraseña ingresada es incorecta";
+        newErrors.password = "La contraseña ingresada es incorrecta";
       }
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
@@ -66,8 +66,8 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         onLoginSuccess?.();
         navigate("/profile");
       }
-    }catch (error) {
-      seterrorsServer(error instanceof Error ? error.message : "No se pudo iniciar sesion");
+    } catch (error) {
+      seterrorsServer(error instanceof Error ? error.message : "No se pudo iniciar sesión.");
     }
   }
 
@@ -75,21 +75,21 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Label>Nickname</Form.Label>
-        <Form.Control type="text" placeholder="Ingresá tu nickname" value={nickName} onChange={(event) => setNickname(event.target.value)} isInvalid={!!errors.nickName}/>
-          {errors.nickName && (
-            <div className="invalid-feedback">{errors.nickName}</div>
-          )}
+        <Form.Control type="text" placeholder="Ingrese un nickname" value={nickName} onChange={(event) => setNickname(event.target.value)} isInvalid={!!errors.nickName} />
+        {errors.nickName && (
+          <div className="invalid-feedback">{errors.nickName}</div>
+        )}
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Contraseña</Form.Label>
-        <Form.Control type="password" placeholder="Ingresá tu contraseña" value={password} onChange={(event) => setPassword(event.target.value)} isInvalid={!!errors.password}/>
-          {errors.password && (
-            <div className="invalid-feedback">{errors.password}</div>
-          )}
+        <Form.Control type="password" placeholder="Ingrese una contraseña" value={password} onChange={(event) => setPassword(event.target.value)} isInvalid={!!errors.password} />
+        {errors.password && (
+          <div className="invalid-feedback">{errors.password}</div>
+        )}
+        {errorsServer && (
+          <div className="invalid-feedback">{errorsServer}</div>
+        )}
       </Form.Group>
-      {errorsServer && (
-        <div className="invalid-feedback">{errorsServer}</div>
-      )}
       <Button type="submit" className="tt-btn tt-btn-primary mt-2">
         Ingresar
       </Button>

@@ -75,9 +75,7 @@ function PostDetail() {
   async function handleAddComment(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!newCommentText.trim() || !user) return;
-    if (!user) {
-      throw new Error('Debe iniciar sesión para comentar');
-    }
+    
     try {
       setSubmitting(true);
 

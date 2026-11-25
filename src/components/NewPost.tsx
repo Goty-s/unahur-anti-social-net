@@ -54,7 +54,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
         setAvailableTags(tags);
       }
       catch (error){
-        throw new Error('Etiquetas no encontradas.');
+       console.error(`Etiquetas no encontradas: `, error);
       }
     }
     loadTags();
@@ -152,7 +152,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
       );
 
       if (results.some((resultado) => !resultado)) {
-        setErrors({ images: "Se debe ingresar una URL valida" })
+        setErrors({ images: "Debe ingresar una URL válida." })
         return;
       }
 
@@ -171,10 +171,10 @@ function NewPost({ onPostSuccess }: NewPostProps) {
         )
       );
       notifyPostCreated();
-      notify("¡Publicacion creada correctamente!");
+      notify("¡Publicación creada correctamente!");
       onPostSuccess?.();
     } catch (error) {
-      console.error(`Error al crear la publicacion`, error);
+      console.error(`Error al crear la publicación`, error);
     } finally {
       setSubmitting(false);
     }
@@ -183,7 +183,7 @@ function NewPost({ onPostSuccess }: NewPostProps) {
   return (
     <>
       <form id="formulario" className={styles.formulario} onSubmit={handleSubmit} noValidate>
-        <p>Completa los campos para crear una nueva publicación.</p>
+        <p>Complete los campos para crear una nueva publicación.</p>
         <div className={styles.campos}>
           <div className={styles.campo}>
             <label htmlFor="description">Descripción *</label>
